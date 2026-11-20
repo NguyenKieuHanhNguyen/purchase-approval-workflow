@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProcureFlow - Google Analytics UI Kit & Purchase Approval Workflow</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            ga: {
+              blue: '#1a73e8',
+              blueHover: '#1557b0',
+              blueLight: '#e8f0fe',
+              border: '#dadce0',
+              text: '#202124',
+              secondary: '#5f6368',
+              bg: '#f8f9fa'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font Awesome Icons & Custom Styles -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="theme-analytic min-h-screen flex text-slate-800 antialiased overflow-x-hidden">
+
+  <!-- ========================================================
+       COMPONENT 1: COLLAPSIBLE SIDEBAR GA4 (từ sidebar.html)
+       ======================================================== -->
+  <aside id="mainSidebar" class="ga-sidebar w-60 bg-white border-r border-slate-200 flex flex-col justify-between h-screen sticky top-0 shrink-0 sidebar-transition select-none z-30">
+    <div class="flex flex-col flex-1 min-h-0">
+      
+      <!-- Logo GA4 Header vs shadcn Cube Header -->
+      <div class="sidebar-header h-16 flex items-center px-5 gap-3.5 border-b border-slate-100 shrink-0">
+        <!-- Logo GA4: 3 cột vạch cam (chỉ hiện ở Analytic mode) -->
+        <div class="analytic-only flex items-end justify-center w-7 h-7 shrink-0" id="logo-ga4-icon">
+          <svg class="w-6 h-6 shrink-0" viewBox="0 0 24 24" fill="none">
+            <!-- Cột 1: thấp (màu cam sáng #F9AB00) -->
+            <rect x="3" y="13" width="4.5" height="8" rx="1.5" fill="#F9AB00" />
+            <!-- Cột 2: vừa (màu cam chuẩn #E37400) -->
+            <rect x="9.75" y="7" width="4.5" height="14" rx="1.5" fill="#E37400" />
+            <!-- Cột 3: cao (màu cam đậm #D56200) -->
+            <rect x="16.5" y="3" width="4.5" height="18" rx="1.5" fill="#D56200" />
+          </svg>
+        </div>
+        <!-- Logo shadcn: Khối Cube đen tối giản (chỉ hiện ở shadcn mode) -->
+        <div class="shadcn-only items-center justify-center w-7 h-7 shrink-0" id="logo-shadcn-icon">
+          <svg class="w-6 h-6 text-zinc-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21.12 6.4-6.05-3.5a3.97 3.97 0 0 0-4.14 0l-6.05 3.5A4 4 0 0 0 3 9.87v4.26a4 4 0 0 0 1.88 3.47l6.05 3.5a3.97 3.97 0 0 0 4.14 0l6.05-3.5a4 4 0 0 0 1.88-3.47V9.87a4 4 0 0 0-1.88-3.47Z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="m3.29 7 8.71 5 8.71-5"/>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 22V12"/>
+          </svg>
+        </div>
+        <div class="sidebar-label overflow-hidden">
+          <span class="text-sm font-bold text-slate-800 whitespace-nowrap block" id="sidebar-app-name">ProcureFlow</span>
+          <span class="analytic-only text-[10px] text-slate-400 font-medium block">Analytics UI Kit</span>
+          <span class="shadcn-only text-[10px] text-zinc-400 font-medium block">shadcn/ui Design</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="p-3 space-y-1.5 overflow-y-auto flex-1">
+        <!-- Trang chủ -->
+        <a href="javascript:void(0)" onclick="setActiveNav(this, 'home')" title="Tổng quan mua hàng" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+          </svg>
+          <span class="sidebar-label text-xs font-medium whitespace-nowrap">Tổng quan mua hàng</span>
+        </a>
+
+        <!-- Báo cáo / Yêu cầu mua sắm (Active Google Blue) -->
+        <a href="javascript:void(0)" onclick="setActiveNav(this, 'reports')" title="Yêu cầu mua sắm (PR)" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg bg-blue-600 text-white transition-colors shadow-2xs font-semibold">
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+          <span class="sidebar-label text-xs font-medium whitespace-nowrap">Yêu cầu mua sắm (PR)</span>
+        </a>
+
+        <!-- Hàng đợi Phê duyệt -->
+        <a href="javascript:void(0)" onclick="filterByPending(); setActiveNav(this, 'approvals')" title="Cần phê duyệt" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+          <svg class="w-5 h-5 shrink-0 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <div class="sidebar-label flex items-center justify-between flex-1">
+            <span class="text-xs font-medium whitespace-nowrap">Cần phê duyệt</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700" id="sidebar-pending-badge">5</span>
+          </div>
+        </a>
+
+        <!-- Hạn mức Ngân sách Phòng ban -->
+        <a href="javascript:void(0)" onclick="openDeptBudgetModal(); setActiveNav(this, 'budget')" title="Ngân sách phòng ban" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+          <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+          </svg>
+          <span class="sidebar-label text-xs font-medium whitespace-nowrap">Ngân sách phòng ban</span>
+        </a>
+
+        <!-- Bản đặc tả 20 Spec & Kịch bản -->
+        <a href="javascript:void(0)" onclick="openSpecModal()" title="20 Spec & Kịch bản" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-indigo-600 hover:bg-indigo-50 transition-colors font-medium">
+          <svg class="w-5 h-5 shrink-0 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+          </svg>
+          <span class="sidebar-label text-xs font-bold whitespace-nowrap">20 Spec & Kịch bản</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Nút Thu gọn / Mở rộng Sidebar ở góc dưới -->
+    <div class="sidebar-footer-container p-3.5 border-t border-slate-100 flex items-center justify-between shrink-0">
+      <button type="button" id="btnToggleSidebar" onclick="toggleSidebar()" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-lg text-slate-500 hover:bg-slate-100 transition-colors text-xs font-medium cursor-pointer">
+        <svg id="sidebarToggleIcon" class="w-5 h-5 shrink-0 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
+        </svg>
+        <span class="sidebar-label text-xs whitespace-nowrap">Thu gọn thanh bên</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ========================================================
+       KHU VỰC NỘI DUNG CHÍNH (MAIN CONTENT AREA)
+       ======================================================== -->
+  <div class="flex-1 flex flex-col min-w-0 bg-[#f8f9fa] min-h-screen">
+
+    <!-- ========================================================
+         COMPONENT 2: TOP HEADER UTILITIES (từ header-utilities.html & popup-picker.html)
+         ======================================================== -->
+    <header class="ga-header sticky top-0 z-40 bg-white border-b border-slate-200 px-6 sm:px-8 py-3.5 flex items-center justify-between gap-4 select-none">
+      
+      <!-- Cụm Chọn Tài Khoản / Phòng Ban -->
+      <div class="flex items-center gap-3 min-w-0">
+        <div id="btnOpenAccountModal" onclick="openAccountPickerModal()" class="bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg px-3.5 py-2 cursor-pointer shadow-2xs transition-all max-w-xs flex items-center gap-2.5">
+          <div class="text-left leading-tight truncate">
+            <div class="text-[10px] text-slate-400 flex items-center gap-1 font-medium">
+              <span>Công ty Cổ phần ProcureFlow</span>
+              <svg class="w-2.5 h-2.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+              <span id="currentAccountText" class="truncate font-semibold text-slate-600">Ngân sách Toàn cty</span>
+            </div>
+            <div class="flex items-center justify-between gap-2 mt-0.5">
+              <span id="currentPropertyText" class="text-xs font-bold text-slate-800 truncate">Tất cả Phòng ban</span>
+              <svg class="w-3 h-3 text-slate-500 fill-slate-500 shrink-0" viewBox="0 0 20 20">
+                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ô Search Toàn cục ở giữa -->
+      <div class="relative flex-1 max-w-lg hidden md:block">
+        <span class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+        </span>
+        <input 
+          type="text" 
+          id="globalSearchInput" 
+          placeholder="Tìm kiếm trong tất cả yêu cầu mua sắm, mã PR, người tạo... (Ctrl + /)" 
+          class="w-full bg-slate-100 hover:bg-slate-200/70 focus:bg-white border border-transparent focus:border-blue-500 rounded-full pl-11 pr-5 py-2.5 text-xs text-slate-700 outline-none transition-all shadow-2xs"
+          oninput="handleSearch(this.value)"
+        >
+      </div>
+
+      <!-- Cụm Tiện ích bên phải -->
+      <div class="flex items-center gap-2.5 shrink-0">
+        
+        <!-- BỘ CHUYỂN ĐỔI THEME: GA4 ANALYTIC UI vs SHADCN (Khớp chính xác media_1795162030296_c222113f.png) -->
+        <div class="flex items-center bg-slate-100/90 p-1 rounded-xl border border-slate-200/90 text-xs font-medium mr-1 shadow-2xs" id="theme-switch-container">
+          <button id="btn-theme-analytic" onclick="switchTheme('analytic')" class="px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 bg-white text-blue-600 shadow-2xs font-semibold cursor-pointer" title="Google Analytics Components Kit">
+            <i class="fa-solid fa-chart-pie text-xs"></i>
+            <span class="text-xs">Analytic Kit</span>
+          </button>
+          <button id="btn-theme-shadcn" onclick="switchTheme('shadcn')" class="px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 text-slate-600 hover:text-slate-900 font-medium cursor-pointer" title="Phong cách thiết kế shadcn/ui">
+            <i class="fa-solid fa-cube text-xs"></i>
+            <span class="text-xs">shadcn/ui</span>
+          </button>
+        </div>
+
+        <!-- 1. NÚT CHUYỂN ĐỔI SẢN PHẨM & TIỆN ÍCH NHANH (WORKSPACE APPS LAUNCHER) -->
+        <div class="relative group" data-popover-wrapper>
+          <button type="button" id="btnProductLauncher" onclick="togglePopover('popoverProducts', event)" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors cursor-pointer" title="Hệ sinh thái ứng dụng & Thao tác nhanh (App Launcher)">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z" />
+            </svg>
+          </button>
+
+          <!-- POPOVER PRODUCT & WORKSPACE APPS LAUNCHER -->
+          <div id="popoverProducts" onclick="event.stopPropagation()" class="popover-panel hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden">
+            <!-- Header -->
+            <div class="p-3.5 border-b border-slate-100 bg-slate-50/80 flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-slate-800 block">Hệ Sinh Thái ProcureFlow</span>
+                <span class="text-[10px] text-slate-500">Bộ công cụ quản trị mua sắm &amp; ngân sách</span>
+              </div>
+              <span class="text-[9px] bg-blue-100 text-blue-700 font-semibold px-2 py-0.5 rounded-full">Workspace Apps</span>
+            </div>
+
+            <!-- Grid 6 Core Apps with Real Actions -->
+            <div class="p-3 grid grid-cols-3 gap-2 text-center text-xs border-b border-slate-100">
+              <!-- App 1: PR Hub -->
+              <button type="button" onclick="launchApp('PR')" class="p-2 rounded-xl hover:bg-slate-50 flex flex-col items-center gap-1.5 text-slate-700 transition-all border border-transparent hover:border-slate-200 cursor-pointer group/app">
+                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 group-hover/app:bg-blue-600 group-hover/app:text-white flex items-center justify-center font-bold text-sm transition-colors shadow-2xs">
+                  <i class="fa-solid fa-list-check"></i>
+                </div>
+                <span class="text-[11px] font-bold text-slate-800">Quản Lý PR</span>
+                <span class="text-[9px] text-slate-400 leading-tight">Danh sách yêu cầu</span>
+              </button>
+
+              <!-- App 2: PO Tracking -->
+              <button type="button" onclick="launchApp('PO')" class="p-2 rounded-xl hover:bg-slate-50 flex flex-col items-center gap-1.5 text-slate-700 transition-all border border-transparent hover:border-slate-200 cursor-pointer group/app">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 group-hover/app:bg-emerald-600 group-hover/app:text-white flex items-center justify-center font-bold text-sm transition-colors shadow-2xs">
+                  <i class="fa-solid fa-truck-fast"></i>
+                </div>
+                <span class="text-[11px] font-bold text-slate-800">Đơn Hàng PO</span>
+                <span class="text-[9px] text-slate-400 leading-tight">Đã duyệt mua</span>
+              </button>
+
+              <!-- App 3: Budget Control -->
+              <button type="button" onclick="launchApp('BUDGET')" class="p-2 rounded-xl hover:bg-slate-50 flex flex-col items-center gap-1.5 text-slate-700 transition-all border border-transparent hover:border-slate-200 cursor-pointer group/app">
+                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 group-hover/app:bg-amber-600 group-hover/app:text-white flex items-center justify-center font-bold text-sm transition-colors shadow-2xs">
+                  <i class="fa-solid fa-vault"></i>
+                </div>
+                <span class="text-[11px] font-bold text-slate-800">Quỹ Ngân Sách</span>
+                <span class="text-[9px] text-slate-400 leading-tight">Hạn mức 6 phòng</span>
+              </button>
+
+              <!-- App 4: Quick Create PR -->
+              <button type="button" onclick="launchApp('NEW_PR')" class="p-2 rounded-xl hover:bg-slate-50 flex flex-col items-center gap-1.5 text-slate-700 transition-all border border-transparent hover:border-slate-200 cursor-pointer group/app">
+                <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 group-hover/app:bg-indigo-600 group-hover/app:text-white flex items-center justify-center font-bold text-sm transition-colors shadow-2xs">
+                  <i class="fa-solid fa-circle-plus"></i>
+                </div>
+                <span class="text-[11px] font-bold text-slate-800">Tạo Phiếu PR</span>
+                <span class="text-[9px] text-slate-400 leading-tight">Khởi tạo nhanh</span>
+              </button>
+
+              <!-- App 5: Export CSV -->
+              <button type="button" onclick="launchApp('EXPORT')" class="p-2 rounded-xl hover:bg-slate-50 flex flex-col items-center gap-1.5 text-slate-700 transition-all border border-transparent hover:border-slate-200 cursor-pointer group/app">
+                <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 group-hover/app:bg-teal-600 group-hover/app:text-white flex items-center justify-center font-bold text-sm transition-colors shadow-2xs">
+                  <i class="fa-solid fa-file-excel"></i>
+                </div>
+                <span class="text-[11px] font-bold text-slate-800">Xuất Báo Cáo</span>
+                <span class="text-[9px] text-slate-400 leading-tight">Tải file Excel/CSV</span>
+              </button>
+
+              <!-- App 6: Print Center -->
+              <button type="button" onclick="launchApp('PRINT')" class="p-2 rounded-xl hover:bg-slate-50 flex flex-col items-center gap-1.5 text-slate-700 transition-all border border-transparent hover:border-slate-200 cursor-pointer group/app">
+                <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 group-hover/app:bg-slate-700 group-hover/app:text-white flex items-center justify-center font-bold text-sm transition-colors shadow-2xs">
+                  <i class="fa-solid fa-print"></i>
+                </div>
+                <span class="text-[11px] font-bold text-slate-800">In Tổng Hợp</span>
+                <span class="text-[9px] text-slate-400 leading-tight">In bảng phiếu PR</span>
+              </button>
+            </div>
+
+            <!-- Quick Action: Khôi phục dữ liệu ban đầu -->
+            <div class="p-2.5 bg-slate-50/60 border-b border-slate-100 flex items-center justify-between">
+              <span class="text-[10px] text-slate-500 font-medium">Dữ liệu kiểm thử:</span>
+              <button type="button" onclick="launchApp('RESET')" class="text-[10px] font-bold text-blue-600 hover:text-blue-800 bg-white hover:bg-blue-50 border border-slate-200 px-2.5 py-1 rounded-md transition-colors flex items-center gap-1.5 shadow-2xs cursor-pointer">
+                <i class="fa-solid fa-rotate-left text-[9px]"></i>
+                <span>Đặt lại 12 PR gốc</span>
+              </button>
+            </div>
+
+            <!-- Accordion: Khám phá thêm ứng dụng Enterprise (chuẩn GA4 Kit) -->
+            <div>
+              <button type="button" onclick="toggleMoreProducts()" class="w-full px-4 py-2.5 bg-slate-50 hover:bg-slate-100 flex items-center justify-between text-[11px] font-semibold text-slate-700 transition-colors cursor-pointer">
+                <span class="flex items-center gap-2">
+                  <i class="fa-solid fa-cubes text-blue-500 text-xs"></i>
+                  <span>Mở rộng hệ sinh thái Enterprise</span>
+                </span>
+                <svg id="arrowMoreProducts" class="w-3.5 h-3.5 text-slate-500 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div id="moreProductsList" class="hidden bg-white divide-y divide-slate-100 text-xs">
+                <button type="button" onclick="launchApp('EXT_CONTRACT')" class="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 transition-colors text-left cursor-pointer">
+                  <i class="fa-solid fa-file-signature text-purple-500 text-sm"></i>
+                  <div>
+                    <div class="font-medium text-slate-800 text-[11px]">Hợp Đồng Điện Tử (E-Contract)</div>
+                    <div class="text-[9px] text-slate-400">Ký số trực tuyến với đối tác</div>
+                  </div>
+                </button>
+                <button type="button" onclick="launchApp('EXT_INVENTORY')" class="w-full flex items-center gap-3 px-4 py-2.5 hover:bg-slate-50 transition-colors text-left cursor-pointer">
+                  <i class="fa-solid fa-warehouse text-emerald-500 text-sm"></i>
+                  <div>
+                    <div class="font-medium text-slate-800 text-[11px]">Quản Lý Kho Vật Tư (Inventory)</div>
+                    <div class="text-[9px] text-slate-400">Nhập kho và cấp phát tài sản</div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. NÚT TRỢ GIÚP & SPEC (?) -->
+        <button type="button" onclick="openSpecModal()" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors cursor-pointer" title="20 Spec & Kịch bản Nghiệp vụ">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.5 9a2.5 2.5 0 015 0c0 1.5-2 2-2 3.5m0 3v.5" />
+          </svg>
+        </button>
+
+        <!-- 3. NÚT THÔNG BÁO (NOTIFICATION CENTER DROPDOWN) -->
+        <div class="relative group" data-popover-wrapper>
+          <button type="button" id="btnNotificationCenter" onclick="togglePopover('popoverNotifications', event)" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors cursor-pointer relative" title="Trung tâm thông báo phê duyệt">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+            <span id="notif-badge" class="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center shadow-xs">4</span>
+          </button>
+
+          <!-- POPOVER NOTIFICATIONS -->
+          <div id="popoverNotifications" onclick="event.stopPropagation()" class="popover-panel hidden absolute right-0 top-full mt-2 w-88 bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden">
+            <!-- Header -->
+            <div class="p-3.5 border-b border-slate-100 bg-slate-50/80 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-slate-800">Thông Báo Phê Duyệt</span>
+                <span id="notif-unread-count-text" class="text-[9px] bg-blue-100 text-blue-700 font-bold px-2 py-0.5 rounded-full">4 mới</span>
+              </div>
+              <button type="button" onclick="markAllNotificationsRead()" class="text-[10px] text-blue-600 hover:text-blue-800 font-semibold hover:underline cursor-pointer">
+                Đánh dấu đã đọc
+              </button>
+            </div>
+
+            <!-- Filter tabs -->
+            <div class="px-3 py-1.5 bg-slate-100/50 border-b border-slate-100 flex items-center gap-2 text-[10px]">
+              <button type="button" onclick="setNotifFilter('all')" id="btnNotifTabAll" class="px-2.5 py-1 rounded-md font-bold bg-white text-slate-800 shadow-2xs cursor-pointer">
+                Tất cả (<span id="notif-total-count">5</span>)
+              </button>
+              <button type="button" onclick="setNotifFilter('urgent')" id="btnNotifTabUrgent" class="px-2.5 py-1 rounded-md font-medium text-slate-500 hover:text-slate-800 hover:bg-white/60 cursor-pointer">
+                Khẩn cấp / Cần duyệt (<span id="notif-urgent-count">2</span>)
+              </button>
+            </div>
+
+            <!-- Notification Items List -->
+            <div id="notifications-list" class="max-h-80 overflow-y-auto divide-y divide-slate-100">
+              <!-- Rendered dynamically by renderNotifications() -->
+            </div>
+
+            <!-- Footer: Quick Actions -->
+            <div class="p-2.5 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between">
+              <button type="button" onclick="filterPendingPRsFromNotif()" class="text-[10px] font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1.5 cursor-pointer">
+                <i class="fa-solid fa-filter text-[9px]"></i>
+                <span>Xem tất cả phiếu chờ duyệt</span>
+              </button>
+              <button type="button" onclick="clearReadNotifications()" class="text-[10px] text-slate-400 hover:text-slate-600 cursor-pointer">
+                Dọn thông báo
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. VAI TRÒ NGƯỜI DÙNG & TÀI KHOẢN (ROLE SWITCHER DROPDOWN CHUẨN GA4/SHADCN) -->
+        <div class="relative" data-popover-wrapper>
+          <button type="button" id="btnUserRolePill" onclick="toggleUserRoleMenu(event)" class="group flex items-center gap-2.5 p-1.5 pl-3 hover:bg-slate-100 rounded-full cursor-pointer transition-all border border-slate-200/80 hover:border-slate-300 bg-white/90 shadow-2xs" title="Bấm để chuyển đổi tài khoản giả lập test phân quyền">
+            <div class="text-right hidden sm:block leading-tight">
+              <span id="current-user-name" class="text-xs font-bold text-slate-800 block">Trần Minh Hoàng</span>
+              <span id="current-user-role-label" class="text-[10px] text-slate-500 font-medium block">Trưởng bộ phận (Manager)</span>
+            </div>
+            <div class="w-8 h-8 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs shadow-xs shrink-0" id="current-user-avatar-initials">
+              TM
+            </div>
+            <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 mr-1 transition-transform shrink-0" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <!-- Dropdown chuyển đổi tài khoản / Vai trò để tiện test -->
+          <div id="popoverRoleMenu" onclick="event.stopPropagation()" class="popover-panel hidden absolute right-0 top-full mt-2 w-84 bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden">
+            <!-- Header: Tài khoản đang hoạt động -->
+            <div class="p-4 border-b border-slate-100 bg-slate-50/70">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow-xs shrink-0" id="popover-avatar-preview">
+                  TM
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div id="popover-current-user-name" class="text-xs font-bold text-slate-800 truncate">Trần Minh Hoàng</div>
+                  <div id="popover-current-user-email" class="text-[11px] text-slate-500 truncate">tmhoang@procureflow.vn</div>
+                  <div id="popover-current-user-role" class="text-[10px] font-semibold text-blue-600 mt-0.5 inline-block bg-blue-50 px-2 py-0.5 rounded">Trưởng bộ phận (Manager)</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Subheader: Hướng dẫn test -->
+            <div class="px-4 py-2 bg-slate-100/60 border-b border-slate-100 flex items-center justify-between">
+              <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">CHỌN TÀI KHOẢN ĐỂ TEST PHÂN QUYỀN</span>
+              <span class="text-[9px] text-blue-600 font-medium">Click để đổi</span>
+            </div>
+
+            <!-- Danh sách 4 tài khoản test -->
+            <div class="p-2 space-y-1">
+              <!-- Tài khoản 1: Requester -->
+              <button type="button" onclick="switchRole('REQUESTER')" class="w-full text-left p-2.5 rounded-xl text-xs hover:bg-slate-50 flex items-center justify-between transition-colors role-opt border border-transparent cursor-pointer" data-role="REQUESTER">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 font-bold flex items-center justify-center text-xs shrink-0">
+                    NV
+                  </div>
+                  <div class="truncate">
+                    <div class="font-bold text-slate-800 truncate">Nguyễn Văn An</div>
+                    <div class="text-[10px] text-slate-500 truncate">Nhân viên đề xuất (Requester)</div>
+                    <div class="text-[9px] text-slate-400">Tạo phiếu & theo dõi tiến độ</div>
+                  </div>
+                </div>
+                <div class="shrink-0 ml-2">
+                  <span class="check-icon hidden text-blue-600 text-sm">
+                    <i class="fa-solid fa-circle-check"></i>
+                  </span>
+                </div>
+              </button>
+
+              <!-- Tài khoản 2: Manager -->
+              <button type="button" onclick="switchRole('MANAGER')" class="w-full text-left p-2.5 rounded-xl text-xs hover:bg-slate-50 flex items-center justify-between transition-colors role-opt border border-transparent cursor-pointer" data-role="MANAGER">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-xs shrink-0">
+                    TM
+                  </div>
+                  <div class="truncate">
+                    <div class="font-bold text-slate-800 truncate">Trần Minh Hoàng</div>
+                    <div class="text-[10px] text-slate-500 truncate">Trưởng bộ phận (Manager)</div>
+                    <div class="text-[9px] text-slate-400">Duyệt cấp 1 (&lt; 50 triệu đ)</div>
+                  </div>
+                </div>
+                <div class="shrink-0 ml-2">
+                  <span class="check-icon hidden text-blue-600 text-sm">
+                    <i class="fa-solid fa-circle-check"></i>
+                  </span>
+                </div>
+              </button>
+
+              <!-- Tài khoản 3: Finance -->
+              <button type="button" onclick="switchRole('FINANCE')" class="w-full text-left p-2.5 rounded-xl text-xs hover:bg-slate-50 flex items-center justify-between transition-colors role-opt border border-transparent cursor-pointer" data-role="FINANCE">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-xs shrink-0">
+                    ĐH
+                  </div>
+                  <div class="truncate">
+                    <div class="font-bold text-slate-800 truncate">Đặng Hồng Hạnh</div>
+                    <div class="text-[10px] text-slate-500 truncate">Kiểm soát ngân sách (Finance)</div>
+                    <div class="text-[9px] text-slate-400">Kiểm soát quỹ, duyệt 50tr - 200tr</div>
+                  </div>
+                </div>
+                <div class="shrink-0 ml-2">
+                  <span class="check-icon hidden text-blue-600 text-sm">
+                    <i class="fa-solid fa-circle-check"></i>
+                  </span>
+                </div>
+              </button>
+
+              <!-- Tài khoản 4: Director -->
+              <button type="button" onclick="switchRole('DIRECTOR')" class="w-full text-left p-2.5 rounded-xl text-xs hover:bg-slate-50 flex items-center justify-between transition-colors role-opt border border-transparent cursor-pointer" data-role="DIRECTOR">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 font-bold flex items-center justify-center text-xs shrink-0">
+                    TQ
+                  </div>
+                  <div class="truncate">
+                    <div class="font-bold text-slate-800 truncate">Trịnh Quang Vinh</div>
+                    <div class="text-[10px] text-slate-500 truncate">Giám đốc điều hành (Director)</div>
+                    <div class="text-[9px] text-slate-400">Duyệt tối cao (&gt; 200 triệu đ)</div>
+                  </div>
+                </div>
+                <div class="shrink-0 ml-2">
+                  <span class="check-icon hidden text-blue-600 text-sm">
+                    <i class="fa-solid fa-circle-check"></i>
+                  </span>
+                </div>
+              </button>
+            </div>
+
+            <!-- Footer ghi chú tiện ích -->
+            <div class="p-3 bg-slate-50/70 border-t border-slate-100 text-[10px] text-slate-500 flex items-center gap-2">
+              <i class="fa-solid fa-circle-info text-blue-500 text-xs shrink-0"></i>
+              <span>Đổi tài khoản sẽ cập nhật ngay quyền Duyệt/Từ chối trên bảng & drawer.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- ========================================================
+         MAIN BODY CONTENT (KHU VỰC CUỘN)
+         ======================================================== -->
+    <main class="flex-1 p-6 sm:p-8 max-w-7xl w-full mx-auto space-y-6">
+
+      <!-- BANNER CHÚ THÍCH PHONG CÁCH UI (Chỉ dùng cho Option Analytic Kit) -->
+      <div id="theme-banner" class="analytic-only rounded-xl p-4 sm:p-5 bg-white border border-slate-200 shadow-2xs flex items-center justify-between">
+        <div class="flex items-center gap-3.5">
+          <span class="w-9 h-9 rounded-lg bg-blue-600 text-white flex items-center justify-center text-sm shadow-sm" id="banner-icon">
+            <i class="fa-solid fa-chart-line"></i>
+          </span>
+          <div>
+            <div class="text-xs font-bold text-slate-900" id="banner-title">Google Analytics Components Kit (Active)</div>
+            <div class="text-[11px] text-slate-500 mt-0.5" id="banner-desc">Đang sử dụng trọn bộ components GA4 UI Kit: Sidebar GA4, Header utilities, Reports Library Table, Right Insights Drawer.</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="toggleTheme()" class="text-xs px-3.5 py-2 rounded-md bg-slate-100 hover:bg-slate-200 font-semibold text-slate-700 transition-colors shadow-2xs">
+            Đổi sang <span id="banner-switch-to-label">shadcn/ui</span> &rarr;
+          </button>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           COMPONENT 3: ACCORDION TASKS (Chỉ dùng cho Option Analytic Kit, từ accordion.html)
+           ======================================================== -->
+      <div class="ga-card bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden analytic-only">
+        <div class="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 cursor-pointer select-none" onclick="toggleAccordion('workflowAccordionBody')">
+          <div class="flex items-center gap-3.5">
+            <span class="w-7 h-7 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-xs font-bold">
+              <i class="fa-solid fa-list-check"></i>
+            </span>
+            <div>
+              <h3 class="text-xs font-bold text-slate-800">Quy trình thẩm định & phê duyệt mua sắm theo chuẩn công ty (4 bước)</h3>
+              <p class="text-[11px] text-slate-500 mt-0.5">Bấm để xem các bước cần kiểm tra trước khi phê duyệt phiếu mua hàng</p>
+            </div>
+          </div>
+          <svg id="workflowAccordionChevron" class="w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+
+        <div id="workflowAccordionBody" class="p-6 sm:p-7 space-y-4 bg-white text-xs divide-y divide-slate-100">
+          <div class="flex items-start gap-3.5 pt-1">
+            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs shrink-0 font-bold mt-0.5">1</span>
+            <div>
+              <span class="font-bold text-slate-800">Bước 1: Nhân viên đề xuất (Requester)</span>
+              <p class="text-slate-500 text-[11px] mt-1 leading-relaxed">Khởi tạo phiếu mua hàng, kèm link sản phẩm hoặc ít nhất 2 bảng báo giá đối tác so sánh.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3.5 pt-4">
+            <span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs shrink-0 font-bold mt-0.5">2</span>
+            <div>
+              <span class="font-bold text-slate-800">Bước 2: Trưởng bộ phận thẩm định (Manager)</span>
+              <p class="text-slate-500 text-[11px] mt-1 leading-relaxed">Xác nhận tính cần thiết và đúng đối tượng thụ hưởng. Duyệt khoản chi &lt; 50,000,000 đ.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3.5 pt-4">
+            <span class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs shrink-0 font-bold mt-0.5">3</span>
+            <div>
+              <span class="font-bold text-slate-800">Bước 3: Kế toán & Kiểm soát ngân sách (Finance)</span>
+              <p class="text-slate-500 text-[11px] mt-1 leading-relaxed">So khớp hạn mức quý của phòng ban, kiểm tra hóa đơn VAT và thẩm định khoản chi từ 50tr - 200tr đ.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3.5 pt-4">
+            <span class="w-6 h-6 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xs shrink-0 font-bold mt-0.5">4</span>
+            <div>
+              <span class="font-bold text-slate-800">Bước 4: Ban Giám Đốc phê duyệt (Director)</span>
+              <p class="text-slate-500 text-[11px] mt-1 leading-relaxed">Phê duyệt chung cuộc các khoản chi &gt; 200,000,000 đ hoặc các khoản chi vượt ngân sách/khẩn cấp.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           SHADCN COMPONENT: STACK TRACE WORKFLOW (Chỉ dùng cho Option shadcn/ui)
+           (từ ui.shadcn.com/docs/ai-elements/base/stack-trace)
+           ======================================================== -->
+      <div id="shadcn-workflow-trace" class="shadcn-only bg-white rounded-xl border border-zinc-200 shadow-2xs overflow-hidden">
+        <div class="p-4 sm:p-5 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/60 cursor-pointer select-none" onclick="toggleAccordion('shadcnTraceBody')">
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-lg bg-zinc-900 text-white flex items-center justify-center text-xs font-mono font-bold">
+              <i class="fa-solid fa-terminal text-[10px]"></i>
+            </span>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-xs font-bold text-zinc-900 font-mono tracking-tight">Stack Trace: Approval Pipeline Execution (4 Phases)</h3>
+                <span class="font-mono text-[9px] px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">ACTIVE</span>
+              </div>
+              <p class="text-[11px] text-zinc-500 mt-0.5">Quy trình thẩm định 4 cấp doanh nghiệp theo chuẩn kiến trúc micro-service</p>
+            </div>
+          </div>
+          <svg id="shadcnTraceChevron" class="w-4 h-4 text-zinc-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
+
+        <div id="shadcnTraceBody" class="p-5 sm:p-6 space-y-3 bg-white text-xs">
+          <div class="rounded-lg border border-zinc-200 bg-zinc-50/60 p-3 font-mono text-[11px] text-zinc-700 flex items-start gap-3">
+            <span class="px-1.5 py-0.5 rounded bg-zinc-200 text-zinc-800 text-[10px] font-bold">PHASE 1</span>
+            <div class="flex-1">
+              <div class="font-bold text-zinc-900">[REQUESTER] Initialize Purchase Request</div>
+              <p class="text-zinc-500 text-[11px] font-sans mt-0.5">Khởi tạo PR, đính kèm link sản phẩm hoặc ít nhất 2 bảng báo giá đối tác.</p>
+            </div>
+            <span class="text-zinc-400 text-[10px] font-sans">0ms latency</span>
+          </div>
+
+          <div class="rounded-lg border border-zinc-200 bg-zinc-50/60 p-3 font-mono text-[11px] text-zinc-700 flex items-start gap-3">
+            <span class="px-1.5 py-0.5 rounded bg-zinc-200 text-zinc-800 text-[10px] font-bold">PHASE 2</span>
+            <div class="flex-1">
+              <div class="font-bold text-zinc-900">[MANAGER] Department Scope Verification</div>
+              <p class="text-zinc-500 text-[11px] font-sans mt-0.5">Xác nhận tính cần thiết và đối tượng thụ hưởng. Duyệt khoản chi &lt; 50,000,000 đ.</p>
+            </div>
+            <span class="text-zinc-400 text-[10px] font-sans">&lt; 24h SLA</span>
+          </div>
+
+          <div class="rounded-lg border border-zinc-200 bg-zinc-50/60 p-3 font-mono text-[11px] text-zinc-700 flex items-start gap-3">
+            <span class="px-1.5 py-0.5 rounded bg-zinc-200 text-zinc-800 text-[10px] font-bold">PHASE 3</span>
+            <div class="flex-1">
+              <div class="font-bold text-zinc-900">[FINANCE] Budget Limit & Tax Compliance</div>
+              <p class="text-zinc-500 text-[11px] font-sans mt-0.5">So khớp hạn mức quý phòng ban, kiểm tra hóa đơn VAT và thẩm định khoản chi 50tr - 200tr đ.</p>
+            </div>
+            <span class="text-zinc-400 text-[10px] font-sans">&lt; 48h SLA</span>
+          </div>
+
+          <div class="rounded-lg border border-zinc-200 bg-zinc-50/60 p-3 font-mono text-[11px] text-zinc-700 flex items-start gap-3">
+            <span class="px-1.5 py-0.5 rounded bg-zinc-200 text-zinc-800 text-[10px] font-bold">PHASE 4</span>
+            <div class="flex-1">
+              <div class="font-bold text-zinc-900">[DIRECTOR] Executive Sign-off & PO Generation</div>
+              <p class="text-zinc-500 text-[11px] font-sans mt-0.5">Phê duyệt chung cuộc các khoản chi &gt; 200,000,000 đ hoặc các khoản chi vượt ngân sách.</p>
+            </div>
+            <span class="text-zinc-400 text-[10px] font-sans">Final Step</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================================
+           COMPONENT 4: OVERVIEW METRIC CARDS (từ exploration-carousel.html)
+           Khắc phục hoàn toàn lỗi sát viền với class .kpi-card & p-6
+           ======================================================== -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5" id="kpi-section">
+        
+        <!-- Card 1: Tổng yêu cầu -->
+        <div class="kpi-card p-6 bg-white rounded-xl border border-slate-200">
+          <div class="flex items-center justify-between text-xs text-slate-500 font-medium">
+            <span class="text-xs font-semibold text-slate-600">Tổng yêu cầu (PR)</span>
+            <span class="text-blue-600 bg-blue-50 px-2.5 py-1 rounded text-[11px] font-bold">Q4 2026</span>
+          </div>
+          <div class="mt-3.5 flex items-baseline gap-2.5">
+            <span class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight" id="kpi-total-pr">12</span>
+            <span class="text-xs text-emerald-600 font-semibold flex items-center gap-1">+4 tuần này</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-2.5">Từ 6 phòng ban toàn công ty</p>
+        </div>
+
+        <!-- Card 2: Chờ phê duyệt -->
+        <div class="kpi-card p-6 bg-white rounded-xl border border-slate-200">
+          <div class="flex items-center justify-between text-xs text-slate-500 font-medium">
+            <span class="text-xs font-semibold text-slate-600">Chờ phê duyệt</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
+          </div>
+          <div class="mt-3.5 flex items-baseline gap-2.5">
+            <span class="text-2xl sm:text-3xl font-extrabold text-amber-600 tracking-tight" id="kpi-pending-pr">5</span>
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700" id="kpi-pending-val">912 tr</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-2.5">Cần xem xét và duyệt sớm</p>
+        </div>
+
+        <!-- Card 3: Đã phê duyệt -->
+        <div class="kpi-card p-6 bg-white rounded-xl border border-slate-200">
+          <div class="flex items-center justify-between text-xs text-slate-500 font-medium">
+            <span class="text-xs font-semibold text-slate-600">Đã phê duyệt</span>
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+          </div>
+          <div class="mt-3.5 flex items-baseline gap-2.5">
+            <span class="text-2xl sm:text-3xl font-extrabold text-emerald-600 tracking-tight" id="kpi-approved-pr">4</span>
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700" id="kpi-approved-val">283.5 tr</span>
+          </div>
+          <p class="text-[11px] text-slate-400 mt-2.5">Sẵn sàng lập đơn đặt hàng PO</p>
+        </div>
+
+        <!-- Card 4: Ngân sách còn lại -->
+        <div class="kpi-card p-6 bg-white rounded-xl border border-slate-200">
+          <div class="flex items-center justify-between text-xs text-slate-500 font-medium">
+            <span class="text-xs font-semibold text-slate-600">Ngân sách khả dụng</span>
+            <span class="text-slate-500 font-semibold text-[11px]">Đã dùng: <strong id="kpi-budget-percent" class="text-blue-600 font-bold">67%</strong></span>
+          </div>
+          <div class="mt-3.5 flex items-baseline justify-between">
+            <span class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight" id="kpi-remaining-budget">1.02 tỷ</span>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-2 mt-3 overflow-hidden">
+            <div id="kpi-budget-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: 67%"></div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================================
+           COMPONENT 5: BẢNG THƯ VIỆN BÁO CÁO MUA SẮM (GA4 REPORTS LIBRARY TABLE)
+           (Trích từ reports-library.html của bộ kit)
+           ======================================================== -->
+      <div class="w-full bg-white border border-slate-200 rounded-xl shadow-2xs font-sans select-none overflow-hidden ga-card">
+        
+        <!-- Toolbar trên bảng (chuẩn reports-library.html) -->
+        <div class="p-5 sm:p-6 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-white">
+          <div class="flex items-center gap-2.5 text-slate-800">
+            <h3 class="text-base font-semibold tracking-tight">Yêu cầu Mua sắm (Purchase Requests)</h3>
+            
+            <div class="relative group cursor-pointer">
+              <svg class="w-4 h-4 text-slate-400 hover:text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" stroke-width="1.8" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9.5 9a2.5 2.5 0 015 0c0 1.5-2 2-2 3.5m0 3v.5" />
+              </svg>
+              <div class="hidden group-hover:block absolute left-full top-1/2 -translate-y-1/2 ml-2 w-64 bg-slate-800 text-white text-[11px] p-2.5 rounded shadow-lg z-30 leading-relaxed pointer-events-none">
+                Quản lý, thẩm định ngân sách và phê duyệt toàn bộ phiếu đề xuất mua sắm tài sản, thiết bị và dịch vụ.
+              </div>
+            </div>
+          </div>
+
+          <!-- Nút Tạo mới + Ô tìm kiếm + Bộ lọc nhanh -->
+          <div class="flex flex-wrap items-center gap-3">
+            
+            <!-- Lọc Phòng ban -->
+            <select id="filter-department" onchange="handleFilterChange()" class="bg-white border border-slate-300 hover:border-slate-400 rounded-lg px-3 py-2 text-xs text-slate-700 outline-none focus:border-blue-500 cursor-pointer">
+              <option value="ALL">Tất cả Phòng ban</option>
+              <option value="it">IT & Kỹ thuật</option>
+              <option value="marketing">Marketing & Truyền thông</option>
+              <option value="hr_admin">Hành chính - Nhân sự</option>
+              <option value="rnd">R&D - Trí tuệ nhân tạo</option>
+              <option value="operations">Vận hành & Hạ tầng</option>
+              <option value="finance">Kế toán - Tài chính</option>
+            </select>
+
+            <!-- Lọc Trạng thái -->
+            <select id="filter-status" onchange="handleFilterChange()" class="bg-white border border-slate-300 hover:border-slate-400 rounded-lg px-3 py-2 text-xs text-slate-700 outline-none focus:border-blue-500 cursor-pointer">
+              <option value="ALL">Tất cả Trạng thái</option>
+              <option value="PENDING">Chờ phê duyệt</option>
+              <option value="NEEDS_INFO">Cần bổ sung</option>
+              <option value="APPROVED">Đã phê duyệt</option>
+              <option value="REJECTED">Từ chối</option>
+              <option value="ORDERED">Đã hoàn tất / PO</option>
+              <option value="DRAFT">Bản nháp</option>
+            </select>
+
+            <!-- Ô tìm kiếm -->
+            <div class="relative w-64">
+              <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+              </span>
+              <input 
+                type="text" 
+                id="reportSearchInput" 
+                placeholder="Tìm kiếm phiếu PR..." 
+                class="w-full bg-white border border-slate-300 rounded-lg pl-10 pr-3.5 py-2 text-xs text-slate-700 outline-none focus:border-blue-500 transition-colors"
+                oninput="handleSearch(this.value)"
+              >
+            </div>
+
+            <!-- Nút Tạo yêu cầu mới -->
+            <button type="button" id="btnCreateReport" onclick="openCreateModal()" class="ga-btn-primary flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer transition-colors shadow-2xs">
+              <span class="text-base leading-none font-bold">+</span>
+              <span>Tạo yêu cầu mới</span>
+            </button>
+
+            <!-- Nút Xuất CSV -->
+            <button type="button" onclick="exportToCSV()" class="p-2 rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-600 text-xs transition-colors" title="Xuất file CSV">
+              <i class="fa-solid fa-file-excel text-emerald-600"></i>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- Bảng danh sách Báo cáo GA4 -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-700 border-collapse">
+            <thead class="ga-table-header bg-white text-[11px] font-medium text-slate-500 border-b border-slate-200">
+              <tr>
+                <th scope="col" class="py-4 px-4 w-12 text-center">
+                  <input type="checkbox" id="selectAllReports" onchange="toggleSelectAll(this.checked)" class="w-4 h-4 rounded text-blue-600 border-slate-300 cursor-pointer accent-blue-600">
+                </th>
+                <th scope="col" class="py-4 px-4 w-12 font-medium">Loại</th>
+                <th scope="col" class="py-4 px-4 font-medium min-w-[220px] cursor-pointer hover:text-blue-600" onclick="handleSort('title')">
+                  Tên hàng hóa / Dịch vụ
+                </th>
+                <th scope="col" class="py-4 px-4 font-medium w-32">Mã PR</th>
+                <th scope="col" class="py-4 px-4 font-medium min-w-[130px]">Phòng ban</th>
+                <th scope="col" class="py-4 px-4 font-medium min-w-[140px]">Người đề xuất</th>
+                <th scope="col" class="py-4 px-4 font-medium cursor-pointer hover:text-blue-600 text-right min-w-[120px]" onclick="handleSort('amount')">
+                  Giá trị dự kiến <span id="sort-amount-arrow" class="inline-block text-[11px]">↓</span>
+                </th>
+                <th scope="col" class="py-4 px-4 font-medium text-center min-w-[90px]">Ưu tiên</th>
+                <th scope="col" class="py-4 px-4 font-medium text-center min-w-[120px]">Trạng thái</th>
+                <th scope="col" class="py-4 px-4 w-12 text-center">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 bg-white" id="reportTableBody">
+              <!-- Render động qua JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden py-14 text-center">
+          <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto text-xl mb-2.5">
+            <i class="fa-solid fa-folder-open"></i>
+          </div>
+          <h4 class="text-xs font-bold text-slate-700">Không tìm thấy yêu cầu mua sắm phù hợp</h4>
+          <p class="text-[11px] text-slate-400 mt-1">Thử đổi từ khóa hoặc bỏ bớt điều kiện lọc.</p>
+          <button onclick="resetFilters()" class="mt-3.5 px-3.5 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-semibold hover:bg-blue-100">
+            Đặt lại bộ lọc
+          </button>
+        </div>
+
+        <!-- ========================================================
+             THANH PHÂN TRANG CHUẨN GA4 (từ reports-library.html)
+             ======================================================== -->
+        <div class="px-6 py-4 border-t border-slate-200 flex flex-wrap items-center justify-end gap-6 text-xs text-slate-600 bg-white select-none">
+          
+          <!-- Số mục trên mỗi trang -->
+          <div class="flex items-center gap-2.5">
+            <span class="text-slate-500 font-normal">Số mục trên mỗi trang:</span>
+            <div class="relative">
+              <select id="pageSizeSelect" onchange="changePageSize(this.value)" class="bg-white border border-slate-300 hover:border-slate-400 rounded-md pl-3 pr-8 py-1.5 text-xs text-slate-800 outline-none cursor-pointer appearance-none focus:border-blue-500 transition-colors">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-500">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thông số phân trang (1 - 5/12) -->
+          <div class="flex items-center gap-4">
+            <span id="paginationInfo" class="font-medium text-slate-700 min-w-[70px] text-right">1 – 5/12</span>
+            
+            <!-- Bộ 4 nút điều hướng GA4 -->
+            <div class="flex items-center gap-1.5">
+              <button type="button" id="btnFirstPage" onclick="changePage(1)" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-colors" title="Trang đầu">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                </svg>
+              </button>
+
+              <button type="button" id="btnPrevPage" onclick="prevPage()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-colors" title="Trang trước">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              <button type="button" id="btnNextPage" onclick="nextPage()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-600 hover:bg-slate-100 transition-colors" title="Trang sau">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+
+              <button type="button" id="btnLastPage" onclick="lastPage()" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-600 hover:bg-slate-100 transition-colors" title="Trang cuối">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ========================================================
+       COMPONENT 6: RIGHT INSIGHTS DRAWER (từ insights-drawer.html)
+       Ngăn Kéo Chú Thích, Chi Tiết & Phê Duyệt Phiếu
+       ======================================================== -->
+  <aside id="drawerAnnotations" class="fixed top-0 right-0 bottom-0 w-[440px] max-w-full bg-white border-l border-slate-200 flex flex-col h-full shrink-0 shadow-2xl z-50 transform translate-x-full drawer-panel select-none">
+    
+    <!-- Drawer Header -->
+    <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-slate-50/70">
+      <div class="flex items-center gap-2.5">
+        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <div>
+          <span id="drawer-pr-id" class="text-xs font-bold text-slate-800">PR-2026-1001</span>
+          <span id="drawer-status-badge" class="badge-status ml-2">Chờ duyệt</span>
+        </div>
+      </div>
+      <button type="button" onclick="closeDetailDrawer()" class="w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center text-slate-600 cursor-pointer" title="Đóng">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Drawer Tabs -->
+    <div class="flex border-b border-slate-200 bg-white text-xs font-semibold px-6 shrink-0">
+      <button type="button" id="drawer-tab-detail" onclick="switchDrawerTab('detail')" class="py-3 px-3.5 border-b-2 border-blue-600 text-blue-600 transition-colors">
+        Chi tiết đề xuất
+      </button>
+      <button type="button" id="drawer-tab-timeline" onclick="switchDrawerTab('timeline')" class="py-3 px-3.5 border-b-2 border-transparent text-slate-500 hover:text-slate-800 transition-colors">
+        Nhật ký phê duyệt (Timeline)
+      </button>
+    </div>
+
+    <!-- Drawer Body -->
+    <div class="flex-1 overflow-y-auto p-6 space-y-5 text-xs" id="drawer-body">
+      
+      <!-- Tab 1: Nội dung Chi tiết đề xuất -->
+      <div id="drawer-view-detail" class="space-y-4">
+        <div>
+          <h2 id="drawer-title" class="text-sm font-bold text-slate-900 leading-snug">
+            -
+          </h2>
+          <div class="mt-1 flex items-center gap-2 text-[11px] text-slate-400">
+            <span id="drawer-category">Thiết bị phần cứng</span>
+            <span>•</span>
+            <span id="drawer-created-at">18/11/2026 09:30</span>
+          </div>
+        </div>
+
+        <!-- Thẻ Giá trị & Ngân sách -->
+        <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 text-[11px]">Tổng giá trị dự kiến:</span>
+            <span id="drawer-amount" class="text-base font-extrabold text-blue-600">0 đ</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 text-[11px]">Phòng ban:</span>
+            <span id="drawer-department" class="font-bold text-slate-800">IT & Kỹ thuật</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500 text-[11px]">Mức độ ưu tiên:</span>
+            <span id="drawer-priority-badge">-</span>
+          </div>
+        </div>
+
+        <!-- Người đề xuất -->
+        <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
+          <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Người tạo yêu cầu</span>
+          <div class="flex items-center gap-3 mt-1.5">
+            <img id="drawer-requester-avatar" src="" class="w-9 h-9 rounded-full object-cover border border-slate-200" alt="Avatar">
+            <div>
+              <div id="drawer-requester-name" class="font-bold text-slate-800 text-xs">-</div>
+              <div id="drawer-requester-role" class="text-[11px] text-slate-400">-</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nhà cung cấp & Link báo giá -->
+        <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-2">
+          <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Thông tin nhà cung cấp</span>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-500">Đơn vị:</span>
+            <strong id="drawer-vendor" class="text-slate-800 font-semibold">-</strong>
+          </div>
+          <div id="drawer-vendor-link-row" class="flex items-center justify-between pt-1">
+            <span class="text-slate-500">Link tham chiếu:</span>
+            <a id="drawer-vendor-link" href="#" target="_blank" class="text-blue-600 hover:underline flex items-center gap-1 font-medium">
+              Xem báo giá <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Lý do & Giải trình -->
+        <div class="space-y-1.5">
+          <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Lý do & Mục đích mua sắm</span>
+          <p id="drawer-purpose" class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 leading-relaxed text-[11px]">
+            -
+          </p>
+        </div>
+
+        <!-- Danh mục vật tư chi tiết -->
+        <div class="space-y-2">
+          <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Danh mục mặt hàng</span>
+          <div class="border border-slate-200 rounded-xl overflow-hidden">
+            <table class="w-full text-left text-[11px]">
+              <thead class="bg-slate-50 border-b border-slate-200 text-slate-500">
+                <tr>
+                  <th class="py-2.5 px-3">Hạng mục</th>
+                  <th class="py-2.5 px-2.5 text-center">SL</th>
+                  <th class="py-2.5 px-2.5 text-right">Đơn giá</th>
+                  <th class="py-2.5 px-3 text-right">Thành tiền</th>
+                </tr>
+              </thead>
+              <tbody id="drawer-items-list" class="divide-y divide-slate-100">
+                <!-- Render từ code -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2: Nhật ký Phê duyệt (Timeline) -->
+      <div id="drawer-view-timeline" class="space-y-4 hidden">
+        <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">Tiến trình phê duyệt (Audit Trail)</span>
+        <div class="relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200" id="drawer-timeline-container">
+          <!-- Render timeline -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Drawer Footer Actions -->
+    <div class="p-5 border-t border-slate-200 bg-slate-50/80 flex items-center justify-between gap-3 shrink-0" id="drawer-actions">
+      <!-- Nút duyệt, từ chối, bổ sung thông tin -->
+    </div>
+
+  </aside>
+
+  <!-- ========================================================
+       FLOATING BULK ACTION BAR (Thanh tác vụ hàng loạt)
+       ======================================================== -->
+  <div id="bulk-action-bar" class="bulk-action-bar fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-800 flex items-center gap-4">
+    <div class="flex items-center gap-2 pr-2 border-r border-slate-700 text-xs">
+      <span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-[10px]" id="bulk-selected-count">0</span>
+      <span class="font-medium text-slate-300">đã chọn</span>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button onclick="handleBulkApprove()" class="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white flex items-center gap-1.5 transition-all shadow-sm">
+        <i class="fa-solid fa-check"></i>
+        <span>Phê duyệt tất cả</span>
+      </button>
+
+      <button onclick="handleBulkReject()" class="px-3.5 py-1.5 text-xs font-bold rounded-lg bg-rose-600 hover:bg-rose-500 text-white flex items-center gap-1.5 transition-all shadow-sm">
+        <i class="fa-solid fa-xmark"></i>
+        <span>Từ chối</span>
+      </button>
+
+      <button onclick="handleBulkExport()" class="px-3.5 py-1.5 text-xs font-medium rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 flex items-center gap-1.5 transition-all">
+        <i class="fa-solid fa-file-export"></i>
+        <span>Xuất CSV</span>
+      </button>
+
+      <button onclick="clearBulkSelection()" class="text-xs text-slate-400 hover:text-white px-2 py-1 transition-colors">
+        Hủy chọn
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       COMPONENT 7: POPUP ACCOUNT & DEPARTMENT PICKER MODAL
+       ======================================================== -->
+  <div id="account-picker-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+      
+      <!-- Modal Header -->
+      <div class="px-7 py-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div>
+          <h3 class="text-sm font-bold text-slate-900">Chọn Phòng Ban & Quản Lý Hạn Mức Ngân Sách</h3>
+          <p class="text-xs text-slate-500 mt-0.5">Tra cứu số dư ngân sách quý và lọc dữ liệu theo phòng ban</p>
+        </div>
+        <button onclick="closeAccountPickerModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="flex-1 overflow-y-auto p-7 grid grid-cols-1 md:grid-cols-2 gap-5">
+        <!-- Cột 1: Danh sách phòng ban -->
+        <div class="space-y-2.5">
+          <span class="text-xs font-bold text-slate-600 uppercase tracking-wider block">Danh sách Phòng ban</span>
+          <div class="space-y-2" id="picker-dept-list">
+            <!-- Render từ JS -->
+          </div>
+        </div>
+
+        <!-- Cột 2: Chi tiết hạn mức phòng ban đang chọn -->
+        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50 flex flex-col justify-between" id="picker-dept-detail">
+          <!-- Render từ JS -->
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-7 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+        <button onclick="selectDepartmentFromPicker('ALL')" class="text-xs text-blue-600 font-semibold hover:underline">
+          Xem tất cả phòng ban
+        </button>
+        <button onclick="closeAccountPickerModal()" class="px-6 py-2.5 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 shadow-sm cursor-pointer transition-all">
+          Đóng
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL TẠO MỚI PHIẾU MUA SẮM (VỚI REAL-TIME BUDGET CHECK)
+       ======================================================== -->
+  <div id="create-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+      
+      <div class="px-7 py-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Tạo Phiếu Đề Xuất Mua Sắm (PR)</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Khởi tạo yêu cầu mua sắm và tự động kiểm tra hạn mức ngân sách</p>
+        </div>
+        <button onclick="closeCreateModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <form id="create-pr-form" onsubmit="handleCreatePR(event)" class="overflow-y-auto px-7 py-6 space-y-4 flex-1 text-xs">
+        <div>
+          <label class="block font-bold text-slate-700 mb-1.5">
+            Tên Hàng Hóa / Dịch Vụ Cần Mua <span class="text-rose-500">*</span>
+          </label>
+          <input type="text" id="new-pr-title" required placeholder="Ví dụ: 03 Màn hình Dell Ultrasharp 27 inch 4K..." class="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1.5">
+              Phòng Ban Đề Xuất <span class="text-rose-500">*</span>
+            </label>
+            <select id="new-pr-department" required onchange="updateBudgetCheckPreview()" class="w-full text-xs px-3 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500">
+              <option value="it">IT & Kỹ thuật</option>
+              <option value="marketing">Marketing & Truyền thông</option>
+              <option value="hr_admin">Hành chính - Nhân sự</option>
+              <option value="rnd">R&D - Trí tuệ nhân tạo</option>
+              <option value="operations">Vận hành & Hạ tầng</option>
+              <option value="finance">Kế toán - Tài chính</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1.5">
+              Danh Mục Mua Sắm <span class="text-rose-500">*</span>
+            </label>
+            <select id="new-pr-category" required class="w-full text-xs px-3 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500">
+              <option value="Thiết bị phần cứng">Thiết bị phần cứng</option>
+              <option value="Phần mềm & Bản quyền">Phần mềm & Bản quyền</option>
+              <option value="Cơ sở vật chất">Cơ sở vật chất</option>
+              <option value="Marketing & Sự kiện">Marketing & Sự kiện</option>
+              <option value="Vật tư & Thiết bị vận hành">Vật tư & Thiết bị vận hành</option>
+              <option value="Dịch vụ tư vấn chuyên nghiệp">Dịch vụ tư vấn chuyên nghiệp</option>
+              <option value="Phúc lợi & Sự kiện nội bộ">Phúc lợi & Sự kiện nội bộ</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1.5">
+              Mức Độ Ưu Tiên <span class="text-rose-500">*</span>
+            </label>
+            <select id="new-pr-priority" required class="w-full text-xs px-3 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500">
+              <option value="MEDIUM">Trung bình (3-5 ngày)</option>
+              <option value="LOW">Thấp (Định kỳ)</option>
+              <option value="HIGH">Cao (24-48h)</option>
+              <option value="URGENT">Khẩn cấp (Trong ngày)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1.5">
+              Nhà Cung Cấp Đề Xuất
+            </label>
+            <input type="text" id="new-pr-vendor" placeholder="Tên công ty cung cấp..." class="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+          <div>
+            <label class="block font-bold text-slate-700 mb-1.5">
+              Số Lượng <span class="text-rose-500">*</span>
+            </label>
+            <input type="number" id="new-pr-qty" min="1" value="1" required oninput="calculateTotalAmount()" class="w-full text-xs px-3.5 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1.5">
+              Đơn Giá (VNĐ) <span class="text-rose-500">*</span>
+            </label>
+            <input type="number" id="new-pr-unit-price" min="10000" step="10000" placeholder="VD: 15000000" required oninput="calculateTotalAmount()" class="w-full text-xs px-3.5 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500">
+          </div>
+
+          <div>
+            <label class="block font-bold text-slate-700 mb-1.5">
+              Tổng Giá Trị
+            </label>
+            <div id="new-pr-total-display" class="w-full text-xs font-bold px-3.5 py-2 rounded-lg bg-blue-50 text-blue-700 border border-blue-200">
+              0 đ
+            </div>
+          </div>
+        </div>
+
+        <!-- Real-time Budget Check Widget -->
+        <div id="budget-preview-box" class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-slate-700 flex items-center gap-1.5">
+              <i class="fa-solid fa-wallet text-blue-600"></i>
+              Kiểm Tra Hạn Mức Ngân Sách Quý
+            </span>
+            <span id="budget-preview-status" class="font-semibold text-emerald-600 text-[11px]">Trong định mức</span>
+          </div>
+          <div class="flex items-center justify-between text-[11px] text-slate-500">
+            <span>Ngân sách còn lại của phòng ban:</span>
+            <span class="font-bold text-slate-800" id="budget-preview-remaining">280,000,000 đ</span>
+          </div>
+          <div class="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
+            <div id="budget-preview-bar" class="bg-blue-600 h-1.5 rounded-full" style="width: 40%"></div>
+          </div>
+          <div id="budget-warning-message" class="text-[11px] text-rose-600 font-semibold hidden flex items-center gap-1">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>CẢNH BÁO: Khoản chi này sẽ vượt quá số dư ngân sách khả dụng của phòng ban!</span>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1.5">
+            Link Báo Giá / Website Sản Phẩm
+          </label>
+          <input type="url" id="new-pr-link" placeholder="https://..." class="w-full text-xs px-3.5 py-2.5 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500">
+        </div>
+
+        <div>
+          <label class="block font-bold text-slate-700 mb-1.5">
+            Lý Do Mua Sắm & Giải Trình Nhu Cầu <span class="text-rose-500">*</span>
+          </label>
+          <textarea id="new-pr-purpose" rows="2.5" required placeholder="Mô tả mục đích sử dụng..." class="w-full text-xs px-3.5 py-2 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500"></textarea>
+        </div>
+
+        <div class="pt-3 border-t border-slate-200 flex items-center justify-end gap-2.5">
+          <button type="button" onclick="closeCreateModal()" class="px-4 py-2 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50">
+            Hủy
+          </button>
+          <button type="button" onclick="handleSaveDraft()" class="px-4 py-2 rounded-lg border border-slate-300 bg-slate-100 hover:bg-slate-200 text-slate-800 font-medium">
+            Lưu nháp
+          </button>
+          <button type="submit" class="ga-btn-primary px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold">
+            Gửi phê duyệt ngay
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL TỪ CHỐI / YÊU CẦU BỔ SUNG THÔNG TIN
+       ======================================================== -->
+  <div id="action-prompt-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+      <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <h3 class="text-sm font-bold text-slate-900" id="prompt-modal-title">Lý do từ chối phiếu mua hàng</h3>
+        <button onclick="closePromptModal()" class="text-slate-400 hover:text-slate-700">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="p-6 space-y-3.5">
+        <p class="text-xs text-slate-500" id="prompt-modal-desc">
+          Vui lòng nhập lý do cụ thể để người đề xuất nắm bắt và điều chỉnh.
+        </p>
+        <textarea id="prompt-modal-input" rows="3" placeholder="Nhập lý do chi tiết..." class="w-full text-xs p-3.5 rounded-lg border border-slate-300 focus:outline-none focus:border-blue-500"></textarea>
+      </div>
+
+      <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-end gap-3">
+        <button onclick="closePromptModal()" class="px-5 py-2.5 text-xs font-semibold rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-100">
+          Hủy
+        </button>
+        <button id="prompt-modal-confirm-btn" onclick="confirmPromptAction()" class="px-6 py-2.5 text-xs font-bold rounded-lg bg-rose-600 hover:bg-rose-700 text-white shadow-sm">
+          Xác nhận
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       MODAL: 20 YÊU CẦU & SPEC (PRD & BUSINESS DEMO SCENARIOS)
+       ======================================================== -->
+  <div id="spec-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+      
+      <div class="px-7 py-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-base font-bold text-slate-900">Bản Đặc Tả 20 Yêu Cầu & Nghiệp Vụ Demo (PRD Spec)</h2>
+            <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700">GA4 Components Kit</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-0.5">Tài liệu phục vụ demo nghiệm thu cho Lead / Product Owner</p>
+        </div>
+        <button onclick="closeSpecModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <div class="flex border-b border-slate-200 bg-slate-100/60 px-7 text-xs font-bold text-slate-600">
+        <button onclick="switchSpecTab('func')" id="spec-tab-func" class="py-3.5 px-4 border-b-2 border-blue-600 text-blue-600 transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-gears"></i>
+          <span>Phần A: 10 Yêu Cầu Chức Năng (FR)</span>
+        </button>
+        <button onclick="switchSpecTab('scenarios')" id="spec-tab-scenarios" class="py-3.5 px-4 border-b-2 border-transparent hover:text-slate-900 transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-boxes-stacked"></i>
+          <span>Phần B: 12 Kịch Bản Dữ Liệu Demo</span>
+        </button>
+        <button onclick="switchSpecTab('roles')" id="spec-tab-roles" class="py-3.5 px-4 border-b-2 border-transparent hover:text-slate-900 transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-users-gear"></i>
+          <span>Ma Trận Phân Quyền (Roles Matrix)</span>
+        </button>
+      </div>
+
+      <div class="overflow-y-auto p-7 space-y-4 flex-1 text-xs text-slate-700">
+        
+        <!-- Tab 1: 10 Yêu Cầu Chức Năng -->
+        <div id="spec-content-func" class="space-y-3.5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+              <span class="font-bold text-blue-600">[FR-01] Khởi tạo Phiếu Mua Hàng:</span>
+              <p class="mt-1 text-slate-600 leading-relaxed">Form tạo PR hoàn chỉnh, tự sinh mã PR-2026-xxxx, chọn danh mục, nhà cung cấp, lý do giải trình.</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+              <span class="font-bold text-blue-600">[FR-02] Kiểm Tra Hạn Mức Ngân Sách:</span>
+              <p class="mt-1 text-slate-600 leading-relaxed">Real-time Budget Checking khi nhập số tiền và chọn phòng ban; cảnh báo đỏ nếu vượt số dư khả dụng.</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+              <span class="font-bold text-blue-600">[FR-03] Đính Kèm Báo Giá & Link:</span>
+              <p class="mt-1 text-slate-600 leading-relaxed">Hỗ trợ lưu trữ link tham chiếu sản phẩm, bảng so sánh đối tác để cấp duyệt thẩm tra nhanh.</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+              <span class="font-bold text-blue-600">[FR-04] Phê Duyệt Đa Cấp:</span>
+              <p class="mt-1 text-slate-600 leading-relaxed">Phê duyệt trực tiếp ở bảng hoặc Drawer, tự động ghi nhận danh tính người duyệt vào Timeline.</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+              <span class="font-bold text-blue-600">[FR-05] Từ Chối Kèm Lý Do:</span>
+              <p class="mt-1 text-slate-600 leading-relaxed">Bắt buộc nhập lý do từ chối rõ ràng qua modal popup để thông báo minh bạch cho nhân viên.</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+              <span class="font-bold text-blue-600">[FR-06] Yêu Cầu Bổ Sung Thông Tin:</span>
+              <p class="mt-1 text-slate-600 leading-relaxed">Chuyển trạng thái sang "Needs Info", kèm yêu cầu thêm 2-3 bảng báo giá cạnh tranh.</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+              <span class="font-bold text-blue-600">[FR-07] Tìm Kiếm & Lọc Đa Tiêu Chí:</span>
+              <p class="mt-1 text-slate-600 leading-relaxed">Tìm kiếm tức thời (live search), lọc theo Trạng thái, Phòng ban, Mức độ ưu tiên cùng lúc.</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+              <span class="font-bold text-blue-600">[FR-08] Xử Lý Hàng Loạt (Bulk Actions):</span>
+              <p class="mt-1 text-slate-600 leading-relaxed">Checkbox từng dòng, chọn tất cả, thanh tác vụ nổi dưới đáy màn hình để duyệt/từ chối/xuất nhiều phiếu.</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+              <span class="font-bold text-blue-600">[FR-09] Chi Tiết Phiếu & Timeline:</span>
+              <p class="mt-1 text-slate-600 leading-relaxed">Right Drawer trượt mượt mà theo chuẩn GA4 hiển thị 4 bước duyệt: Requester &rarr; Manager &rarr; Finance &rarr; Director.</p>
+            </div>
+            <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
+              <span class="font-bold text-blue-600">[FR-10] Phân Trang GA4 & Xuất Báo Cáo:</span>
+              <p class="mt-1 text-slate-600 leading-relaxed">Thanh phân trang chuẩn GA4 Reports Table, xuất file Excel/CSV chuẩn UTF-8 và in phiếu mua hàng.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: 12 Kịch Bản Demo -->
+        <div id="spec-content-scenarios" class="space-y-3 hidden">
+          <div class="border border-slate-200 rounded-xl overflow-hidden">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-100 text-slate-600 font-bold">
+                <tr>
+                  <th class="py-3 px-3.5">Mã PR</th>
+                  <th class="py-3 px-3.5">Hàng hóa / Dịch vụ</th>
+                  <th class="py-3 px-3.5">Phòng ban</th>
+                  <th class="py-3 px-3.5 text-right">Số tiền</th>
+                  <th class="py-3 px-3.5 text-center">Trạng thái</th>
+                  <th class="py-3 px-3.5">Ý nghĩa kịch bản</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 bg-white" id="spec-scenarios-table-body">
+                <!-- Render từ code -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab 3: Ma Trận Phân Quyền -->
+        <div id="spec-content-roles" class="space-y-3.5 hidden">
+          <div class="p-5 rounded-xl border border-slate-200 bg-slate-50 space-y-2.5 text-xs">
+            <h4 class="font-bold text-slate-800 mb-2">Phân Cấp Thẩm Quyền Chi Tiêu (Approval Threshold Matrix)</h4>
+            <div class="flex items-start gap-2.5">
+              <span class="font-bold text-blue-600 min-w-[140px]">&lt; 50,000,000 đ:</span>
+              <span>Trưởng bộ phận (Manager) có thẩm quyền ký duyệt trực tiếp sau khi xác nhận nhu cầu.</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="font-bold text-blue-600 min-w-[140px]">50tr - 200,000,000 đ:</span>
+              <span>Kiểm soát ngân sách (Finance) thẩm định hạn mức quý và điều khoản nhà cung cấp.</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="font-bold text-blue-600 min-w-[140px]">&gt; 200,000,000 đ:</span>
+              <span>Bắt buộc có phê duyệt chung cuộc từ Giám đốc điều hành (Director).</span>
+            </div>
+            <div class="flex items-start gap-2.5">
+              <span class="font-bold text-rose-600 min-w-[140px]">Vượt hạn mức ngân sách:</span>
+              <span>Kế toán cảnh báo, tự động trình xin phê duyệt ngoại lệ của Ban Tổng Giám Đốc.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="px-7 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+        <span class="text-xs text-slate-500">File tài liệu đính kèm: <code>SPEC_REQUIREMENTS.md</code></span>
+        <button onclick="closeSpecModal()" class="px-6 py-2.5 text-xs font-semibold rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition-all cursor-pointer">
+          Đóng cửa sổ
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Print Area -->
+  <div id="print-area" class="hidden"></div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
