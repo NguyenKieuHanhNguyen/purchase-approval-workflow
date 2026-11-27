@@ -17,7 +17,7 @@
   --ga-text-secondary: #5f6368;
   --ga-border: #dadce0;
 
-  /* shadcn/ui Variables (chuẩn ui.shadcn.com) */
+  /* shadcn/ui Variables */
   --shadcn-bg: #ffffff;
   --shadcn-fg: #09090b;
   --shadcn-border: #e4e4e7;
@@ -29,8 +29,6 @@
 
 /* ========================================================
    QUY TẮC PHÂN TÁCH HIỂN THỊ ĐỘC LẬP
-   Analytic Kit components chỉ hiển thị ở theme-analytic
-   shadcn/ui components chỉ hiển thị ở theme-shadcn
    ======================================================== */
 body.theme-analytic .shadcn-only {
   display: none !important;
@@ -41,22 +39,26 @@ body.theme-shadcn .analytic-only {
 }
 
 /* ========================================================
-   QUY TẮC PADDING & KHOẢNG CÁCH (BREATHING ROOM)
+   QUY TẮC PADDING, TABLE HEADER & KHOẢNG CÁCH
    ======================================================== */
 .kpi-card {
-  padding: 1.5rem !important; /* 24px padding xung quanh để chống sát viền */
+  padding: 1.5rem !important;
   transition: all 0.2s ease;
 }
 
-/* Đảm bảo các nút action trong modal có padding thoáng đãng, không bị sát chữ */
+table th {
+  white-space: nowrap;
+}
+
 #spec-modal button[onclick*="closeSpecModal"],
 #account-picker-modal button[onclick*="closeAccountPickerModal"],
-#action-prompt-modal button,
+#action-prompt-modal button[onclick*="closePromptModal"],
+#action-prompt-modal #prompt-modal-confirm-btn,
 #create-modal button[type="submit"] {
-  padding-left: 1.5rem !important; /* 24px padding trái */
-  padding-right: 1.5rem !important; /* 24px padding phải */
-  padding-top: 0.625rem !important; /* 10px padding trên */
-  padding-bottom: 0.625rem !important; /* 10px padding dưới */
+  padding-left: 1.5rem !important;
+  padding-right: 1.5rem !important;
+  padding-top: 0.625rem !important;
+  padding-bottom: 0.625rem !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -93,11 +95,11 @@ body.theme-analytic .kpi-card {
   background-color: #ffffff;
   border: 1px solid #dadce0;
   border-radius: 12px;
-  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
 }
 
 body.theme-analytic .kpi-card:hover {
-  box-shadow: 0 4px 6px -1px rgba(60,64,67,0.25), 0 2px 4px -2px rgba(60,64,67,0.15);
+  box-shadow: 0 4px 6px -1px rgba(60, 64, 67, 0.25), 0 2px 4px -2px rgba(60, 64, 67, 0.15);
   border-color: #bdc1c6;
 }
 
@@ -118,7 +120,7 @@ body.theme-analytic .ga-btn-primary {
 }
 body.theme-analytic .ga-btn-primary:hover {
   background-color: #174ea6;
-  box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+  box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
 }
 
 body.theme-analytic .badge-status {
@@ -129,11 +131,11 @@ body.theme-analytic .badge-status {
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  white-space: nowrap;
 }
 
 /* ========================================================
-   THEME 2: SHADCN/UI STYLE (CHUẨN ui.shadcn.com)
-   Tích hợp Breadcrumb, Action Button Group, Alert Callout & AI Trace
+   THEME 2: SHADCN/UI STYLE
    ======================================================== */
 body.theme-shadcn {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -164,7 +166,7 @@ body.theme-shadcn .ga-card,
 body.theme-shadcn .kpi-card {
   background-color: #ffffff !important;
   border: 1px solid #e4e4e7 !important;
-  border-radius: 0.75rem !important; /* 12px / rounded-xl */
+  border-radius: 0.75rem !important;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04) !important;
 }
 
@@ -179,6 +181,10 @@ body.theme-shadcn .ga-table-header {
   color: #71717a !important;
   font-size: 0.75rem !important;
   font-weight: 500 !important;
+}
+
+body.theme-shadcn .report-row:hover {
+  background-color: #f4f4f5 !important;
 }
 
 body.theme-shadcn select,
@@ -202,9 +208,9 @@ body.theme-shadcn textarea:focus {
 }
 
 body.theme-shadcn .ga-btn-primary {
-  background-color: #18181b !important; /* Primary đen hoàn toàn chuẩn shadcn */
+  background-color: #18181b !important;
   color: #fafafa !important;
-  border-radius: 0.5rem !important; /* rounded-lg */
+  border-radius: 0.5rem !important;
   font-weight: 500 !important;
   border: 1px solid #18181b !important;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
@@ -213,31 +219,30 @@ body.theme-shadcn .ga-btn-primary:hover {
   background-color: #27272a !important;
 }
 
-/* Nút active trên sidebar khi ở theme shadcn */
 body.theme-shadcn .nav-item.bg-blue-600 {
-  background-color: #18181b !important; /* Primary shadcn */
+  background-color: #18181b !important;
   color: #ffffff !important;
   border-radius: 0.5rem !important;
 }
 
 body.theme-shadcn .badge-status {
-  border-radius: 0.375rem !important; /* rounded-md */
+  border-radius: 0.375rem !important;
   font-weight: 500 !important;
   font-size: 11px !important;
   padding: 3px 10px !important;
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  white-space: nowrap;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
   border: 1px solid #e4e4e7 !important;
 }
 
-/* Dropdown Menu chuẩn shadcn (từ media_1795161649839_ba011bdb.png) */
 body.theme-shadcn .row-action-dropdown,
 body.theme-shadcn .popover-panel {
   background-color: #ffffff !important;
   border: 1px solid #e4e4e7 !important;
-  border-radius: 0.75rem !important; /* 12px / rounded-xl */
+  border-radius: 0.75rem !important;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04) !important;
   padding: 0.375rem !important;
 }
@@ -263,20 +268,8 @@ body.theme-shadcn .popover-panel button.text-red-600:hover {
   color: #dc2626 !important;
 }
 
-/* Callout / Alert Cards chuẩn shadcn (từ media_1795161684914_2eca8a7e.png) */
-body.theme-shadcn #shadcn-alerts-section > div {
-  border-color: #e4e4e7 !important;
-  background-color: #ffffff !important;
-  border-radius: 0.75rem !important;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.04) !important;
-}
-body.theme-shadcn #shadcn-alerts-section > div:hover {
-  border-color: #d4d4d8 !important;
-}
-
 /* ========================================================
    AI ELEMENTS / STACK TRACE & TRACE STYLES
-   (Dành riêng cho Timeline & Audit Log chuẩn ui.shadcn.com)
    ======================================================== */
 .shadcn-trace {
   display: flex;
@@ -305,8 +298,8 @@ body.theme-shadcn #shadcn-alerts-section > div:hover {
 .shadcn-trace-content {
   margin-top: 0.375rem;
   padding: 0.75rem 1rem;
-  border-radius: 0.5rem; /* rounded-lg */
-  background-color: #f4f4f5; /* bg-muted */
+  border-radius: 0.5rem;
+  background-color: #f4f4f5;
   border: 1px solid #e4e4e7;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.75rem;
@@ -317,15 +310,12 @@ body.theme-shadcn #shadcn-alerts-section > div:hover {
 /* ========================================================
    ANIMATION & TRANSITIONS
    ======================================================== */
-
-/* Sidebar thu gọn / bung ra */
 .sidebar-transition {
   transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Căn giữa icon khi sidebar thu gọn */
 #mainSidebar.sidebar-collapsed {
-  width: 4.25rem !important; /* 68px */
+  width: 4.25rem !important;
 }
 
 #mainSidebar.sidebar-collapsed .sidebar-header {
@@ -340,8 +330,8 @@ body.theme-shadcn #shadcn-alerts-section > div:hover {
 }
 
 #mainSidebar.sidebar-collapsed .nav-item {
-  width: 2.75rem !important; /* 44px */
-  height: 2.75rem !important; /* 44px */
+  width: 2.75rem !important;
+  height: 2.75rem !important;
   padding: 0 !important;
   margin-left: auto !important;
   margin-right: auto !important;
@@ -379,13 +369,11 @@ body.theme-shadcn #shadcn-alerts-section > div:hover {
   margin: 0 auto !important;
 }
 
-/* Tooltip hiển thị mượt mà */
 .group:hover .tooltip-box {
   opacity: 1 !important;
   pointer-events: auto !important;
 }
 
-/* Popover Panel */
 .popover-panel {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
@@ -413,7 +401,6 @@ body.theme-shadcn #popoverRoleMenu button.role-opt {
   border-radius: 0.75rem !important;
 }
 
-/* Floating Bulk Action Bar */
 .bulk-action-bar {
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   transform: translateY(120%);
@@ -426,12 +413,10 @@ body.theme-shadcn #popoverRoleMenu button.role-opt {
   pointer-events: auto;
 }
 
-/* Right Drawer trượt animation */
 .drawer-panel {
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -447,7 +432,6 @@ body.theme-shadcn #popoverRoleMenu button.role-opt {
   background: #94a3b8;
 }
 
-/* Toaster Popup */
 .toast-item {
   animation: slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -462,7 +446,6 @@ body.theme-shadcn #popoverRoleMenu button.role-opt {
   }
 }
 
-/* Print styling */
 @media print {
   body * {
     visibility: hidden;
@@ -477,3 +460,5 @@ body.theme-shadcn #popoverRoleMenu button.role-opt {
     width: 100%;
   }
 }
+
+Tới đây, cả dữ liệu 20 yêu cầu mẫu, luồng phê duyệt/từ chối/bổ sung, bộ lọc/tìm kiếm/phân trang, drawer chi tiết và dual-theme `Analytic Kit` / `shadcn/ui` đều đã hoàn chỉnh để bạn demo[cite: 8, 9, 11, 12]. Nếu muốn bổ sung thêm biểu đồ ngân sách phòng ban từ `analytics_ref`[cite: 7, 10] hoặc chỉnh thêm chi tiết nào khi chạy thực tế, cứ báo mình nhé!

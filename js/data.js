@@ -92,7 +92,7 @@ const USER_ROLES = {
   }
 };
 
-// 12 Kịch bản mua hàng mẫu đa dạng trạng thái, phòng ban, mức giá
+// 20 Kịch bản mua hàng mẫu đa dạng trạng thái, phòng ban, mức giá
 const INITIAL_PURCHASE_REQUESTS = [
   {
     id: "PR-2026-1001",
@@ -319,7 +319,7 @@ const INITIAL_PURCHASE_REQUESTS = [
     amount: 240000000,
     priority: "HIGH",
     vendor: "Google Asia Pacific Pte. Ltd",
-    vendorLink: "https://ads.google.com",
+    vendorLink: "https://ads.google.com/ups/routing?source=206&subid=xs-ip-gemini-adlt",
     status: "PENDING",
     purpose: "Chạy chiến dịch tìm kiếm và GDN nhắm đến tệp khách hàng quản lý doanh nghiệp vừa và nhỏ (SME).",
     items: [
@@ -446,6 +446,234 @@ const INITIAL_PURCHASE_REQUESTS = [
       { step: "Trưởng phòng duyệt", user: "Lê Quốc Bảo (Manager)", time: "19/11/2026 13:10", note: "Ủng hộ mạnh mẽ, đề xuất xin trích thêm ngân sách đặc thù từ quỹ R&D tổng", status: "completed" },
       { step: "Kiểm soát ngân sách", user: "Đặng Hồng Hạnh (Finance)", time: "19/11/2026 15:30", note: "CẢNH BÁO: Khoản chi 310tr vượt mức dư ngân sách R&D (còn 90tr). Đã chuyển trình Tổng Giám Đốc xem xét phê duyệt ngoại lệ.", status: "current" },
       { step: "Tổng Giám Đốc duyệt", user: "Trịnh Quang Vinh (Director)", time: "-", note: "Chờ ý kiến quyết định của Ban Tổng Giám Đốc", status: "pending" }
+    ]
+  },
+  {
+    id: "PR-2026-1013",
+    title: "04 Chuột & bàn phím cơ không dây phục vụ QA & Testing",
+    category: "Thiết bị phần cứng",
+    department: "it",
+    departmentName: "IT & Kỹ thuật",
+    requester: {
+      name: "Trần Thị Mai",
+      role: "Frontend Tech Lead",
+      email: "mai.tran@company.vn",
+      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop&crop=faces"
+    },
+    createdAt: "2026-11-20 09:00",
+    updatedAt: "2026-11-20 10:15",
+    amount: 16800000,
+    priority: "LOW",
+    vendor: "GearVN Vietnam",
+    vendorLink: "https://gearvn.com/keychron-logitech",
+    status: "PENDING",
+    purpose: "Thay thế bộ phím chuột đã hao mòn cho nhóm QA kiểm thử giao diện và thao tác phím tắt liên tục.",
+    items: [
+      { name: "Bàn phím cơ Keychron K2 Pro Wireless", qty: 4, unitPrice: 2400000 },
+      { name: "Chuột không dây Logitech MX Master 3S", qty: 4, unitPrice: 1800000 }
+    ],
+    timeline: [
+      { step: "Tạo phiếu đề xuất", user: "Trần Thị Mai", time: "20/11/2026 09:00", note: "Khoản chi dưới 50tr, thuộc hạn mức duyệt của Trưởng bộ phận", status: "completed" },
+      { step: "Trưởng bộ phận duyệt", user: "Trần Minh Hoàng (Manager)", time: "-", note: "Đang chờ Trưởng bộ phận xác nhận nhu cầu", status: "current" }
+    ]
+  },
+  {
+    id: "PR-2026-1014",
+    title: "Sản xuất video giới thiệu sản phẩm & KOL review Q4",
+    category: "Marketing & Sự kiện",
+    department: "marketing",
+    departmentName: "Marketing & Truyền thông",
+    requester: {
+      name: "Phạm Hương Giang",
+      role: "Marketing Director Assistant",
+      email: "giang.pham@company.vn",
+      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop&crop=faces"
+    },
+    createdAt: "2026-11-20 11:10",
+    updatedAt: "2026-11-20 14:00",
+    amount: 85000000,
+    priority: "HIGH",
+    vendor: "Studio Sáng Tạo 24h",
+    vendorLink: "https://sangtao24h.vn/production-package",
+    status: "APPROVED",
+    purpose: "Quay dựng video showcase tính năng mới và phát sóng trên kênh YouTube/LinkedIn doanh nghiệp.",
+    items: [
+      { name: "Gói sản xuất TVC/Demo Video 4K + Hậu kỳ & Motion", qty: 1, unitPrice: 60000000 },
+      { name: "Booking Tech Reviewer chuyên ngành công nghệ", qty: 1, unitPrice: 25000000 }
+    ],
+    timeline: [
+      { step: "Tạo phiếu", user: "Phạm Hương Giang", time: "20/11/2026 11:10", note: "Kèm storyboard chi tiết", status: "completed" },
+      { step: "Trưởng phòng duyệt", user: "Vũ Hải Đăng", time: "20/11/2026 12:30", note: "Đã duyệt kịch bản và ngân sách", status: "completed" },
+      { step: "Finance thẩm định", user: "Đặng Hồng Hạnh", time: "20/11/2026 14:00", note: "Đã phê duyệt trong hạn mức Marketing", status: "completed" }
+    ]
+  },
+  {
+    id: "PR-2026-1015",
+    title: "Gói Cloud Hosting & Database Production AWS (Tháng 12)",
+    category: "Phần mềm & Bản quyền",
+    department: "operations",
+    departmentName: "Vận hành & Hạ tầng",
+    requester: {
+      name: "Vũ Đức Thắng",
+      role: "Infrastructure Lead",
+      email: "thang.vu@company.vn",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=faces"
+    },
+    createdAt: "2026-11-21 08:45",
+    updatedAt: "2026-11-21 10:20",
+    amount: 148000000,
+    priority: "URGENT",
+    vendor: "Amazon Web Services (AWS)",
+    vendorLink: "https://aws.amazon.com/pricing",
+    status: "ORDERED",
+    purpose: "Duy trì cụm EC2, RDS và S3 phục vụ lưu lượng truy cập cao điểm cuối năm.",
+    items: [
+      { name: "AWS Compute, Managed RDS & Data Transfer (Dec 2026)", qty: 1, unitPrice: 148000000 }
+    ],
+    timeline: [
+      { step: "Tạo phiếu", user: "Vũ Đức Thắng", time: "21/11/2026 08:45", note: "Đính kèm báo cáo dự báo chi phí AWS Cost Explorer", status: "completed" },
+      { step: "Finance & Director duyệt", user: "Đặng Hồng Hạnh & Trịnh Quang Vinh", time: "21/11/2026 10:20", note: "Đã duyệt và đối soát thẻ thanh toán doanh nghiệp.", status: "completed" }
+    ]
+  },
+  {
+    id: "PR-2026-1016",
+    title: "Bộ dụng cụ vệ sinh & khử khuẩn văn phòng định kỳ 6 tháng",
+    category: "Vật tư & Thiết bị vận hành",
+    department: "hr_admin",
+    departmentName: "Hành chính - Nhân sự",
+    requester: {
+      name: "Đỗ Minh Tuấn",
+      role: "Facilities Officer",
+      email: "tuan.do@company.vn",
+      avatar: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=100&h=100&fit=crop&crop=faces"
+    },
+    createdAt: "2026-11-21 13:20",
+    updatedAt: "2026-11-21 15:00",
+    amount: 19500000,
+    priority: "MEDIUM",
+    vendor: "Công ty TNHH Vệ sinh Xanh Sài Gòn",
+    vendorLink: "https://vesinhxanh.vn/supplies",
+    status: "NEEDS_INFO",
+    purpose: "Bổ sung dung dịch sát khuẩn, giấy vệ sinh và vật tư vệ sinh cho 2 tầng văn phòng.",
+    items: [
+      { name: "Combo vật tư vệ sinh & khử khuẩn văn phòng (6 tháng)", qty: 1, unitPrice: 19500000 }
+    ],
+    timeline: [
+      { step: "Tạo phiếu", user: "Đỗ Minh Tuấn", time: "21/11/2026 13:20", note: "Đã gửi danh sách định mức", status: "completed" },
+      { step: "Trưởng bộ phận", user: "Ngô Lan Anh", time: "21/11/2026 15:00", note: "Cần bổ sung chi tiết đơn giá từng mặt hàng trước khi duyệt", status: "current" }
+    ]
+  },
+  {
+    id: "PR-2026-1017",
+    title: "Mua bộ Dataset huấn luyện mô hình OCR tiếng Việt",
+    category: "Phần mềm & Bản quyền",
+    department: "rnd",
+    departmentName: "R&D - Trí tuệ nhân tạo",
+    requester: {
+      name: "Phan Gia Huy",
+      role: "Lead AI Researcher",
+      email: "huy.phan@company.vn",
+      avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=100&h=100&fit=crop&crop=faces"
+    },
+    createdAt: "2026-11-22 09:15",
+    updatedAt: "2026-11-22 09:15",
+    amount: 64000000,
+    priority: "HIGH",
+    vendor: "VietData AI Lab",
+    vendorLink: "https://vietdata.ai/ocr-dataset",
+    status: "DRAFT",
+    purpose: "Bản nháp đề xuất mua 50.000 mẫu hóa đơn & chứng từ có gán nhãn chuẩn phục vụ bài toán trích xuất tài liệu.",
+    items: [
+      { name: "Vietnamese Financial Document OCR Dataset (50k annotated samples)", qty: 1, unitPrice: 64000000 }
+    ],
+    timeline: [
+      { step: "Lưu bản nháp", user: "Phan Gia Huy", time: "22/11/2026 09:15", note: "Đang kiểm tra độ phủ chữ viết tay trước khi gửi duyệt", status: "current" }
+    ]
+  },
+  {
+    id: "PR-2026-1018",
+    title: "Khóa đào tạo chuẩn hóa quy trình kế toán & thuế 2026",
+    category: "Dịch vụ tư vấn chuyên nghiệp",
+    department: "finance",
+    departmentName: "Kế toán - Tài chính",
+    requester: {
+      name: "Đặng Hồng Hạnh",
+      role: "Finance Controller",
+      email: "hanh.dang@company.vn",
+      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop&crop=faces"
+    },
+    createdAt: "2026-11-22 10:40",
+    updatedAt: "2026-11-22 14:20",
+    amount: 34000000,
+    priority: "MEDIUM",
+    vendor: "Viện Kế toán & Kiểm toán VN",
+    vendorLink: "https://vienketoan.vn/course-2026",
+    status: "APPROVED",
+    purpose: "Cập nhật chính sách hóa đơn điện tử và quy định thuế mới cho 6 nhân sự phòng Tài chính - Kế toán.",
+    items: [
+      { name: "Vé tham dự khóa chuyên đề (6 học viên)", qty: 6, unitPrice: 5666667 }
+    ],
+    timeline: [
+      { step: "Tạo phiếu", user: "Đặng Hồng Hạnh", time: "22/11/2026 10:40", note: "Kèm lịch học và syllabus", status: "completed" },
+      { step: "Giám đốc phê duyệt", user: "Trịnh Quang Vinh", time: "22/11/2026 14:20", note: "Đồng ý cử nhân sự tham gia đào tạo", status: "completed" }
+    ]
+  },
+  {
+    id: "PR-2026-1019",
+    title: "In ấn tài liệu Catalog & Booth backdrop hội nghị khách hàng",
+    category: "Marketing & Sự kiện",
+    department: "marketing",
+    departmentName: "Marketing & Truyền thông",
+    requester: {
+      name: "Phạm Hương Giang",
+      role: "Marketing Director Assistant",
+      email: "giang.pham@company.vn",
+      avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&h=100&fit=crop&crop=faces"
+    },
+    createdAt: "2026-11-23 08:20",
+    updatedAt: "2026-11-23 11:05",
+    amount: 22500000,
+    priority: "LOW",
+    vendor: "Xưởng In Nhanh Offset Sài Gòn",
+    vendorLink: "https://innhanhsaigon.vn/catalog",
+    status: "REJECTED",
+    purpose: "In 500 cuốn catalog giới thiệu giải pháp và bộ backdrop sự kiện.",
+    items: [
+      { name: "In 500 cuốn Catalog giấy Couche 150gsm + cán màng mờ", qty: 1, unitPrice: 14500000 },
+      { name: "Bộ Backdrop khung sắt & Standee sự kiện", qty: 1, unitPrice: 8000000 }
+    ],
+    timeline: [
+      { step: "Tạo phiếu", user: "Phạm Hương Giang", time: "23/11/2026 08:20", note: "Đã gửi file thiết kế", status: "completed" },
+      { step: "Trưởng bộ phận từ chối", user: "Vũ Hải Đăng", time: "23/11/2026 11:05", note: "TỪ CHỐI: Chuyển sang dùng QR Code & brochure số để tiết kiệm chi phí in ấn và thân thiện môi trường.", status: "rejected" }
+    ]
+  },
+  {
+    id: "PR-2026-1020",
+    title: "02 Switch mạng quản lý 24 cổng 10Gbps cho tủ Rack chính",
+    category: "Vật tư & Thiết bị vận hành",
+    department: "operations",
+    departmentName: "Vận hành & Hạ tầng",
+    requester: {
+      name: "Vũ Đức Thắng",
+      role: "Infrastructure Lead",
+      email: "thang.vu@company.vn",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=faces"
+    },
+    createdAt: "2026-11-24 09:10",
+    updatedAt: "2026-11-24 10:50",
+    amount: 92000000,
+    priority: "HIGH",
+    vendor: "Cisco / Đại lý Thiết bị Mạng NetPro",
+    vendorLink: "https://netpro.vn/catalyst-switch-10g",
+    status: "PENDING",
+    purpose: "Tăng băng thông kết nối nội bộ giữa các cụm máy chủ và hệ thống lưu trữ NAS.",
+    items: [
+      { name: "Managed Switch 24-Port 10GbE SFP+", qty: 2, unitPrice: 46000000 }
+    ],
+    timeline: [
+      { step: "Tạo phiếu", user: "Vũ Đức Thắng", time: "24/11/2026 09:10", note: "Đính kèm sơ đồ đấu nối mạng nội bộ", status: "completed" },
+      { step: "Trưởng bộ phận duyệt", user: "Phạm Hữu Đạt", time: "24/11/2026 10:50", note: "Đã xác nhận nhu cầu kỹ thuật, chuyển kiểm soát ngân sách", status: "completed" },
+      { step: "Kiểm soát ngân sách", user: "Đặng Hồng Hạnh (Finance)", time: "-", note: "Đang đối chiếu hạn mức vận hành quý 4", status: "current" }
     ]
   }
 ];

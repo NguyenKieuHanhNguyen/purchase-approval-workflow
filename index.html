@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -35,25 +36,20 @@
 <body class="theme-analytic min-h-screen flex text-slate-800 antialiased overflow-x-hidden">
 
   <!-- ========================================================
-       COMPONENT 1: COLLAPSIBLE SIDEBAR GA4 (từ sidebar.html)
+       COMPONENT 1: COLLAPSIBLE SIDEBAR GA4
        ======================================================== -->
   <aside id="mainSidebar" class="ga-sidebar w-60 bg-white border-r border-slate-200 flex flex-col justify-between h-screen sticky top-0 shrink-0 sidebar-transition select-none z-30">
     <div class="flex flex-col flex-1 min-h-0">
       
       <!-- Logo GA4 Header vs shadcn Cube Header -->
       <div class="sidebar-header h-16 flex items-center px-5 gap-3.5 border-b border-slate-100 shrink-0">
-        <!-- Logo GA4: 3 cột vạch cam (chỉ hiện ở Analytic mode) -->
         <div class="analytic-only flex items-end justify-center w-7 h-7 shrink-0" id="logo-ga4-icon">
           <svg class="w-6 h-6 shrink-0" viewBox="0 0 24 24" fill="none">
-            <!-- Cột 1: thấp (màu cam sáng #F9AB00) -->
             <rect x="3" y="13" width="4.5" height="8" rx="1.5" fill="#F9AB00" />
-            <!-- Cột 2: vừa (màu cam chuẩn #E37400) -->
             <rect x="9.75" y="7" width="4.5" height="14" rx="1.5" fill="#E37400" />
-            <!-- Cột 3: cao (màu cam đậm #D56200) -->
             <rect x="16.5" y="3" width="4.5" height="18" rx="1.5" fill="#D56200" />
           </svg>
         </div>
-        <!-- Logo shadcn: Khối Cube đen tối giản (chỉ hiện ở shadcn mode) -->
         <div class="shadcn-only items-center justify-center w-7 h-7 shrink-0" id="logo-shadcn-icon">
           <svg class="w-6 h-6 text-zinc-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="m21.12 6.4-6.05-3.5a3.97 3.97 0 0 0-4.14 0l-6.05 3.5A4 4 0 0 0 3 9.87v4.26a4 4 0 0 0 1.88 3.47l6.05 3.5a3.97 3.97 0 0 0 4.14 0l6.05-3.5a4 4 0 0 0 1.88-3.47V9.87a4 4 0 0 0-1.88-3.47Z"/>
@@ -70,7 +66,6 @@
 
       <!-- Navigation Links -->
       <nav class="p-3 space-y-1.5 overflow-y-auto flex-1">
-        <!-- Trang chủ -->
         <a href="javascript:void(0)" onclick="setActiveNav(this, 'home')" title="Tổng quan mua hàng" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
           <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -78,7 +73,6 @@
           <span class="sidebar-label text-xs font-medium whitespace-nowrap">Tổng quan mua hàng</span>
         </a>
 
-        <!-- Báo cáo / Yêu cầu mua sắm (Active Google Blue) -->
         <a href="javascript:void(0)" onclick="setActiveNav(this, 'reports')" title="Yêu cầu mua sắm (PR)" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg bg-blue-600 text-white transition-colors shadow-2xs font-semibold">
           <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
@@ -86,18 +80,16 @@
           <span class="sidebar-label text-xs font-medium whitespace-nowrap">Yêu cầu mua sắm (PR)</span>
         </a>
 
-        <!-- Hàng đợi Phê duyệt -->
         <a href="javascript:void(0)" onclick="filterByPending(); setActiveNav(this, 'approvals')" title="Cần phê duyệt" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
           <svg class="w-5 h-5 shrink-0 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
           </svg>
           <div class="sidebar-label flex items-center justify-between flex-1">
             <span class="text-xs font-medium whitespace-nowrap">Cần phê duyệt</span>
-            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700" id="sidebar-pending-badge">5</span>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-700" id="sidebar-pending-badge">6</span>
           </div>
         </a>
 
-        <!-- Hạn mức Ngân sách Phòng ban -->
         <a href="javascript:void(0)" onclick="openDeptBudgetModal(); setActiveNav(this, 'budget')" title="Ngân sách phòng ban" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
           <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
@@ -105,7 +97,6 @@
           <span class="sidebar-label text-xs font-medium whitespace-nowrap">Ngân sách phòng ban</span>
         </a>
 
-        <!-- Bản đặc tả 20 Spec & Kịch bản -->
         <a href="javascript:void(0)" onclick="openSpecModal()" title="20 Spec & Kịch bản" class="nav-item flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-indigo-600 hover:bg-indigo-50 transition-colors font-medium">
           <svg class="w-5 h-5 shrink-0 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
@@ -132,7 +123,7 @@
   <div class="flex-1 flex flex-col min-w-0 bg-[#f8f9fa] min-h-screen">
 
     <!-- ========================================================
-         COMPONENT 2: TOP HEADER UTILITIES (từ header-utilities.html & popup-picker.html)
+         COMPONENT 2: TOP HEADER UTILITIES
          ======================================================== -->
     <header class="ga-header sticky top-0 z-40 bg-white border-b border-slate-200 px-6 sm:px-8 py-3.5 flex items-center justify-between gap-4 select-none">
       
@@ -176,7 +167,7 @@
       <!-- Cụm Tiện ích bên phải -->
       <div class="flex items-center gap-2.5 shrink-0">
         
-        <!-- BỘ CHUYỂN ĐỔI THEME: GA4 ANALYTIC UI vs SHADCN (Khớp chính xác media_1795162030296_c222113f.png) -->
+        <!-- BỘ CHUYỂN ĐỔI THEME: GA4 ANALYTIC UI vs SHADCN -->
         <div class="flex items-center bg-slate-100/90 p-1 rounded-xl border border-slate-200/90 text-xs font-medium mr-1 shadow-2xs" id="theme-switch-container">
           <button id="btn-theme-analytic" onclick="switchTheme('analytic')" class="px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 bg-white text-blue-600 shadow-2xs font-semibold cursor-pointer" title="Google Analytics Components Kit">
             <i class="fa-solid fa-chart-pie text-xs"></i>
@@ -188,17 +179,15 @@
           </button>
         </div>
 
-        <!-- 1. NÚT CHUYỂN ĐỔI SẢN PHẨM & TIỆN ÍCH NHANH (WORKSPACE APPS LAUNCHER) -->
+        <!-- 1. NÚT CHUYỂN ĐỔI SẢN PHẨM & TIỆN ÍCH NHANH -->
         <div class="relative group" data-popover-wrapper>
-          <button type="button" id="btnProductLauncher" onclick="togglePopover('popoverProducts', event)" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors cursor-pointer" title="Hệ sinh thái ứng dụng & Thao tác nhanh (App Launcher)">
+          <button type="button" id="btnProductLauncher" onclick="openHeaderPopover('popoverProducts', event)" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors cursor-pointer" title="Hệ sinh thái ứng dụng & Thao tác nhanh (App Launcher)">
             <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
               <path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z" />
             </svg>
           </button>
 
-          <!-- POPOVER PRODUCT & WORKSPACE APPS LAUNCHER -->
           <div id="popoverProducts" onclick="event.stopPropagation()" class="popover-panel hidden absolute right-0 top-full mt-2 w-80 bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden">
-            <!-- Header -->
             <div class="p-3.5 border-b border-slate-100 bg-slate-50/80 flex items-center justify-between">
               <div>
                 <span class="text-xs font-bold text-slate-800 block">Hệ Sinh Thái ProcureFlow</span>
@@ -207,9 +196,7 @@
               <span class="text-[9px] bg-blue-100 text-blue-700 font-semibold px-2 py-0.5 rounded-full">Workspace Apps</span>
             </div>
 
-            <!-- Grid 6 Core Apps with Real Actions -->
             <div class="p-3 grid grid-cols-3 gap-2 text-center text-xs border-b border-slate-100">
-              <!-- App 1: PR Hub -->
               <button type="button" onclick="launchApp('PR')" class="p-2 rounded-xl hover:bg-slate-50 flex flex-col items-center gap-1.5 text-slate-700 transition-all border border-transparent hover:border-slate-200 cursor-pointer group/app">
                 <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 group-hover/app:bg-blue-600 group-hover/app:text-white flex items-center justify-center font-bold text-sm transition-colors shadow-2xs">
                   <i class="fa-solid fa-list-check"></i>
@@ -218,7 +205,6 @@
                 <span class="text-[9px] text-slate-400 leading-tight">Danh sách yêu cầu</span>
               </button>
 
-              <!-- App 2: PO Tracking -->
               <button type="button" onclick="launchApp('PO')" class="p-2 rounded-xl hover:bg-slate-50 flex flex-col items-center gap-1.5 text-slate-700 transition-all border border-transparent hover:border-slate-200 cursor-pointer group/app">
                 <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 group-hover/app:bg-emerald-600 group-hover/app:text-white flex items-center justify-center font-bold text-sm transition-colors shadow-2xs">
                   <i class="fa-solid fa-truck-fast"></i>
@@ -227,7 +213,6 @@
                 <span class="text-[9px] text-slate-400 leading-tight">Đã duyệt mua</span>
               </button>
 
-              <!-- App 3: Budget Control -->
               <button type="button" onclick="launchApp('BUDGET')" class="p-2 rounded-xl hover:bg-slate-50 flex flex-col items-center gap-1.5 text-slate-700 transition-all border border-transparent hover:border-slate-200 cursor-pointer group/app">
                 <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 group-hover/app:bg-amber-600 group-hover/app:text-white flex items-center justify-center font-bold text-sm transition-colors shadow-2xs">
                   <i class="fa-solid fa-vault"></i>
@@ -236,7 +221,6 @@
                 <span class="text-[9px] text-slate-400 leading-tight">Hạn mức 6 phòng</span>
               </button>
 
-              <!-- App 4: Quick Create PR -->
               <button type="button" onclick="launchApp('NEW_PR')" class="p-2 rounded-xl hover:bg-slate-50 flex flex-col items-center gap-1.5 text-slate-700 transition-all border border-transparent hover:border-slate-200 cursor-pointer group/app">
                 <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 group-hover/app:bg-indigo-600 group-hover/app:text-white flex items-center justify-center font-bold text-sm transition-colors shadow-2xs">
                   <i class="fa-solid fa-circle-plus"></i>
@@ -245,7 +229,6 @@
                 <span class="text-[9px] text-slate-400 leading-tight">Khởi tạo nhanh</span>
               </button>
 
-              <!-- App 5: Export CSV -->
               <button type="button" onclick="launchApp('EXPORT')" class="p-2 rounded-xl hover:bg-slate-50 flex flex-col items-center gap-1.5 text-slate-700 transition-all border border-transparent hover:border-slate-200 cursor-pointer group/app">
                 <div class="w-10 h-10 rounded-xl bg-teal-50 text-teal-600 group-hover/app:bg-teal-600 group-hover/app:text-white flex items-center justify-center font-bold text-sm transition-colors shadow-2xs">
                   <i class="fa-solid fa-file-excel"></i>
@@ -254,7 +237,6 @@
                 <span class="text-[9px] text-slate-400 leading-tight">Tải file Excel/CSV</span>
               </button>
 
-              <!-- App 6: Print Center -->
               <button type="button" onclick="launchApp('PRINT')" class="p-2 rounded-xl hover:bg-slate-50 flex flex-col items-center gap-1.5 text-slate-700 transition-all border border-transparent hover:border-slate-200 cursor-pointer group/app">
                 <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 group-hover/app:bg-slate-700 group-hover/app:text-white flex items-center justify-center font-bold text-sm transition-colors shadow-2xs">
                   <i class="fa-solid fa-print"></i>
@@ -264,16 +246,14 @@
               </button>
             </div>
 
-            <!-- Quick Action: Khôi phục dữ liệu ban đầu -->
             <div class="p-2.5 bg-slate-50/60 border-b border-slate-100 flex items-center justify-between">
               <span class="text-[10px] text-slate-500 font-medium">Dữ liệu kiểm thử:</span>
               <button type="button" onclick="launchApp('RESET')" class="text-[10px] font-bold text-blue-600 hover:text-blue-800 bg-white hover:bg-blue-50 border border-slate-200 px-2.5 py-1 rounded-md transition-colors flex items-center gap-1.5 shadow-2xs cursor-pointer">
                 <i class="fa-solid fa-rotate-left text-[9px]"></i>
-                <span>Đặt lại 12 PR gốc</span>
+                <span>Đặt lại 20 PR gốc</span>
               </button>
             </div>
 
-            <!-- Accordion: Khám phá thêm ứng dụng Enterprise (chuẩn GA4 Kit) -->
             <div>
               <button type="button" onclick="toggleMoreProducts()" class="w-full px-4 py-2.5 bg-slate-50 hover:bg-slate-100 flex items-center justify-between text-[11px] font-semibold text-slate-700 transition-colors cursor-pointer">
                 <span class="flex items-center gap-2">
@@ -312,18 +292,16 @@
           </svg>
         </button>
 
-        <!-- 3. NÚT THÔNG BÁO (NOTIFICATION CENTER DROPDOWN) -->
+        <!-- 3. NÚT THÔNG BÁO -->
         <div class="relative group" data-popover-wrapper>
-          <button type="button" id="btnNotificationCenter" onclick="togglePopover('popoverNotifications', event)" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors cursor-pointer relative" title="Trung tâm thông báo phê duyệt">
+          <button type="button" id="btnNotificationCenter" onclick="openHeaderPopover('popoverNotifications', event)" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-600 transition-colors cursor-pointer relative" title="Trung tâm thông báo phê duyệt">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
             </svg>
             <span id="notif-badge" class="absolute top-1 right-1 min-w-[16px] h-4 px-1 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center shadow-xs">4</span>
           </button>
 
-          <!-- POPOVER NOTIFICATIONS -->
           <div id="popoverNotifications" onclick="event.stopPropagation()" class="popover-panel hidden absolute right-0 top-full mt-2 w-88 bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden">
-            <!-- Header -->
             <div class="p-3.5 border-b border-slate-100 bg-slate-50/80 flex items-center justify-between">
               <div class="flex items-center gap-2">
                 <span class="text-xs font-bold text-slate-800">Thông Báo Phê Duyệt</span>
@@ -334,7 +312,6 @@
               </button>
             </div>
 
-            <!-- Filter tabs -->
             <div class="px-3 py-1.5 bg-slate-100/50 border-b border-slate-100 flex items-center gap-2 text-[10px]">
               <button type="button" onclick="setNotifFilter('all')" id="btnNotifTabAll" class="px-2.5 py-1 rounded-md font-bold bg-white text-slate-800 shadow-2xs cursor-pointer">
                 Tất cả (<span id="notif-total-count">5</span>)
@@ -344,12 +321,8 @@
               </button>
             </div>
 
-            <!-- Notification Items List -->
-            <div id="notifications-list" class="max-h-80 overflow-y-auto divide-y divide-slate-100">
-              <!-- Rendered dynamically by renderNotifications() -->
-            </div>
+            <div id="notifications-list" class="max-h-80 overflow-y-auto divide-y divide-slate-100"></div>
 
-            <!-- Footer: Quick Actions -->
             <div class="p-2.5 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between">
               <button type="button" onclick="filterPendingPRsFromNotif()" class="text-[10px] font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1.5 cursor-pointer">
                 <i class="fa-solid fa-filter text-[9px]"></i>
@@ -362,7 +335,7 @@
           </div>
         </div>
 
-        <!-- 4. VAI TRÒ NGƯỜI DÙNG & TÀI KHOẢN (ROLE SWITCHER DROPDOWN CHUẨN GA4/SHADCN) -->
+        <!-- 4. VAI TRÒ NGƯỜI DÙNG & TÀI KHOẢN -->
         <div class="relative" data-popover-wrapper>
           <button type="button" id="btnUserRolePill" onclick="toggleUserRoleMenu(event)" class="group flex items-center gap-2.5 p-1.5 pl-3 hover:bg-slate-100 rounded-full cursor-pointer transition-all border border-slate-200/80 hover:border-slate-300 bg-white/90 shadow-2xs" title="Bấm để chuyển đổi tài khoản giả lập test phân quyền">
             <div class="text-right hidden sm:block leading-tight">
@@ -377,9 +350,7 @@
             </svg>
           </button>
 
-          <!-- Dropdown chuyển đổi tài khoản / Vai trò để tiện test -->
           <div id="popoverRoleMenu" onclick="event.stopPropagation()" class="popover-panel hidden absolute right-0 top-full mt-2 w-84 bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 overflow-hidden">
-            <!-- Header: Tài khoản đang hoạt động -->
             <div class="p-4 border-b border-slate-100 bg-slate-50/70">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow-xs shrink-0" id="popover-avatar-preview">
@@ -393,20 +364,15 @@
               </div>
             </div>
 
-            <!-- Subheader: Hướng dẫn test -->
             <div class="px-4 py-2 bg-slate-100/60 border-b border-slate-100 flex items-center justify-between">
               <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">CHỌN TÀI KHOẢN ĐỂ TEST PHÂN QUYỀN</span>
               <span class="text-[9px] text-blue-600 font-medium">Click để đổi</span>
             </div>
 
-            <!-- Danh sách 4 tài khoản test -->
             <div class="p-2 space-y-1">
-              <!-- Tài khoản 1: Requester -->
               <button type="button" onclick="switchRole('REQUESTER')" class="w-full text-left p-2.5 rounded-xl text-xs hover:bg-slate-50 flex items-center justify-between transition-colors role-opt border border-transparent cursor-pointer" data-role="REQUESTER">
                 <div class="flex items-center gap-2.5 min-w-0">
-                  <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 font-bold flex items-center justify-center text-xs shrink-0">
-                    NV
-                  </div>
+                  <div class="w-8 h-8 rounded-full bg-slate-200 text-slate-700 font-bold flex items-center justify-center text-xs shrink-0">NV</div>
                   <div class="truncate">
                     <div class="font-bold text-slate-800 truncate">Nguyễn Văn An</div>
                     <div class="text-[10px] text-slate-500 truncate">Nhân viên đề xuất (Requester)</div>
@@ -414,18 +380,13 @@
                   </div>
                 </div>
                 <div class="shrink-0 ml-2">
-                  <span class="check-icon hidden text-blue-600 text-sm">
-                    <i class="fa-solid fa-circle-check"></i>
-                  </span>
+                  <span class="check-icon hidden text-blue-600 text-sm"><i class="fa-solid fa-circle-check"></i></span>
                 </div>
               </button>
 
-              <!-- Tài khoản 2: Manager -->
               <button type="button" onclick="switchRole('MANAGER')" class="w-full text-left p-2.5 rounded-xl text-xs hover:bg-slate-50 flex items-center justify-between transition-colors role-opt border border-transparent cursor-pointer" data-role="MANAGER">
                 <div class="flex items-center gap-2.5 min-w-0">
-                  <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-xs shrink-0">
-                    TM
-                  </div>
+                  <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-xs shrink-0">TM</div>
                   <div class="truncate">
                     <div class="font-bold text-slate-800 truncate">Trần Minh Hoàng</div>
                     <div class="text-[10px] text-slate-500 truncate">Trưởng bộ phận (Manager)</div>
@@ -433,18 +394,13 @@
                   </div>
                 </div>
                 <div class="shrink-0 ml-2">
-                  <span class="check-icon hidden text-blue-600 text-sm">
-                    <i class="fa-solid fa-circle-check"></i>
-                  </span>
+                  <span class="check-icon hidden text-blue-600 text-sm"><i class="fa-solid fa-circle-check"></i></span>
                 </div>
               </button>
 
-              <!-- Tài khoản 3: Finance -->
               <button type="button" onclick="switchRole('FINANCE')" class="w-full text-left p-2.5 rounded-xl text-xs hover:bg-slate-50 flex items-center justify-between transition-colors role-opt border border-transparent cursor-pointer" data-role="FINANCE">
                 <div class="flex items-center gap-2.5 min-w-0">
-                  <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-xs shrink-0">
-                    ĐH
-                  </div>
+                  <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-xs shrink-0">ĐH</div>
                   <div class="truncate">
                     <div class="font-bold text-slate-800 truncate">Đặng Hồng Hạnh</div>
                     <div class="text-[10px] text-slate-500 truncate">Kiểm soát ngân sách (Finance)</div>
@@ -452,18 +408,13 @@
                   </div>
                 </div>
                 <div class="shrink-0 ml-2">
-                  <span class="check-icon hidden text-blue-600 text-sm">
-                    <i class="fa-solid fa-circle-check"></i>
-                  </span>
+                  <span class="check-icon hidden text-blue-600 text-sm"><i class="fa-solid fa-circle-check"></i></span>
                 </div>
               </button>
 
-              <!-- Tài khoản 4: Director -->
               <button type="button" onclick="switchRole('DIRECTOR')" class="w-full text-left p-2.5 rounded-xl text-xs hover:bg-slate-50 flex items-center justify-between transition-colors role-opt border border-transparent cursor-pointer" data-role="DIRECTOR">
                 <div class="flex items-center gap-2.5 min-w-0">
-                  <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 font-bold flex items-center justify-center text-xs shrink-0">
-                    TQ
-                  </div>
+                  <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 font-bold flex items-center justify-center text-xs shrink-0">TQ</div>
                   <div class="truncate">
                     <div class="font-bold text-slate-800 truncate">Trịnh Quang Vinh</div>
                     <div class="text-[10px] text-slate-500 truncate">Giám đốc điều hành (Director)</div>
@@ -471,14 +422,11 @@
                   </div>
                 </div>
                 <div class="shrink-0 ml-2">
-                  <span class="check-icon hidden text-blue-600 text-sm">
-                    <i class="fa-solid fa-circle-check"></i>
-                  </span>
+                  <span class="check-icon hidden text-blue-600 text-sm"><i class="fa-solid fa-circle-check"></i></span>
                 </div>
               </button>
             </div>
 
-            <!-- Footer ghi chú tiện ích -->
             <div class="p-3 bg-slate-50/70 border-t border-slate-100 text-[10px] text-slate-500 flex items-center gap-2">
               <i class="fa-solid fa-circle-info text-blue-500 text-xs shrink-0"></i>
               <span>Đổi tài khoản sẽ cập nhật ngay quyền Duyệt/Từ chối trên bảng & drawer.</span>
@@ -490,7 +438,7 @@
     </header>
 
     <!-- ========================================================
-         MAIN BODY CONTENT (KHU VỰC CUỘN)
+         MAIN BODY CONTENT
          ======================================================== -->
     <main class="flex-1 p-6 sm:p-8 max-w-7xl w-full mx-auto space-y-6">
 
@@ -513,7 +461,7 @@
       </div>
 
       <!-- ========================================================
-           COMPONENT 3: ACCORDION TASKS (Chỉ dùng cho Option Analytic Kit, từ accordion.html)
+           COMPONENT 3: ACCORDION TASKS (Analytic Kit)
            ======================================================== -->
       <div class="ga-card bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden analytic-only">
         <div class="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50 cursor-pointer select-none" onclick="toggleAccordion('workflowAccordionBody')">
@@ -564,8 +512,7 @@
       </div>
 
       <!-- ========================================================
-           SHADCN COMPONENT: STACK TRACE WORKFLOW (Chỉ dùng cho Option shadcn/ui)
-           (từ ui.shadcn.com/docs/ai-elements/base/stack-trace)
+           SHADCN COMPONENT: STACK TRACE WORKFLOW (shadcn/ui)
            ======================================================== -->
       <div id="shadcn-workflow-trace" class="shadcn-only bg-white rounded-xl border border-zinc-200 shadow-2xs overflow-hidden">
         <div class="p-4 sm:p-5 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/60 cursor-pointer select-none" onclick="toggleAccordion('shadcnTraceBody')">
@@ -626,73 +573,64 @@
       </div>
 
       <!-- ========================================================
-           COMPONENT 4: OVERVIEW METRIC CARDS (từ exploration-carousel.html)
-           Khắc phục hoàn toàn lỗi sát viền với class .kpi-card & p-6
+           COMPONENT 4: OVERVIEW METRIC CARDS
            ======================================================== -->
       <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5" id="kpi-section">
-        
-        <!-- Card 1: Tổng yêu cầu -->
         <div class="kpi-card p-6 bg-white rounded-xl border border-slate-200">
           <div class="flex items-center justify-between text-xs text-slate-500 font-medium">
             <span class="text-xs font-semibold text-slate-600">Tổng yêu cầu (PR)</span>
             <span class="text-blue-600 bg-blue-50 px-2.5 py-1 rounded text-[11px] font-bold">Q4 2026</span>
           </div>
           <div class="mt-3.5 flex items-baseline gap-2.5">
-            <span class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight" id="kpi-total-pr">12</span>
-            <span class="text-xs text-emerald-600 font-semibold flex items-center gap-1">+4 tuần này</span>
+            <span class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight" id="kpi-total-pr">20</span>
+            <span class="text-xs text-emerald-600 font-semibold flex items-center gap-1">+8 tuần này</span>
           </div>
           <p class="text-[11px] text-slate-400 mt-2.5">Từ 6 phòng ban toàn công ty</p>
         </div>
 
-        <!-- Card 2: Chờ phê duyệt -->
         <div class="kpi-card p-6 bg-white rounded-xl border border-slate-200">
           <div class="flex items-center justify-between text-xs text-slate-500 font-medium">
             <span class="text-xs font-semibold text-slate-600">Chờ phê duyệt</span>
             <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></span>
           </div>
           <div class="mt-3.5 flex items-baseline gap-2.5">
-            <span class="text-2xl sm:text-3xl font-extrabold text-amber-600 tracking-tight" id="kpi-pending-pr">5</span>
-            <span class="text-xs font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700" id="kpi-pending-val">912 tr</span>
+            <span class="text-2xl sm:text-3xl font-extrabold text-amber-600 tracking-tight" id="kpi-pending-pr">6</span>
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-700" id="kpi-pending-val">1.0 tỷ</span>
           </div>
           <p class="text-[11px] text-slate-400 mt-2.5">Cần xem xét và duyệt sớm</p>
         </div>
 
-        <!-- Card 3: Đã phê duyệt -->
         <div class="kpi-card p-6 bg-white rounded-xl border border-slate-200">
           <div class="flex items-center justify-between text-xs text-slate-500 font-medium">
             <span class="text-xs font-semibold text-slate-600">Đã phê duyệt</span>
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
           </div>
           <div class="mt-3.5 flex items-baseline gap-2.5">
-            <span class="text-2xl sm:text-3xl font-extrabold text-emerald-600 tracking-tight" id="kpi-approved-pr">4</span>
-            <span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700" id="kpi-approved-val">283.5 tr</span>
+            <span class="text-2xl sm:text-3xl font-extrabold text-emerald-600 tracking-tight" id="kpi-approved-pr">5</span>
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700" id="kpi-approved-val">354 tr</span>
           </div>
           <p class="text-[11px] text-slate-400 mt-2.5">Sẵn sàng lập đơn đặt hàng PO</p>
         </div>
 
-        <!-- Card 4: Ngân sách còn lại -->
         <div class="kpi-card p-6 bg-white rounded-xl border border-slate-200">
           <div class="flex items-center justify-between text-xs text-slate-500 font-medium">
             <span class="text-xs font-semibold text-slate-600">Ngân sách khả dụng</span>
-            <span class="text-slate-500 font-semibold text-[11px]">Đã dùng: <strong id="kpi-budget-percent" class="text-blue-600 font-bold">67%</strong></span>
+            <span class="text-slate-500 font-semibold text-[11px]">Đã dùng: <strong id="kpi-budget-percent" class="text-blue-600 font-bold">68%</strong></span>
           </div>
           <div class="mt-3.5 flex items-baseline justify-between">
-            <span class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight" id="kpi-remaining-budget">1.02 tỷ</span>
+            <span class="text-2xl sm:text-3xl font-extrabold text-slate-800 tracking-tight" id="kpi-remaining-budget">1.0 tỷ</span>
           </div>
           <div class="w-full bg-slate-100 rounded-full h-2 mt-3 overflow-hidden">
-            <div id="kpi-budget-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: 67%"></div>
+            <div id="kpi-budget-bar" class="bg-blue-600 h-2 rounded-full transition-all duration-500" style="width: 68%"></div>
           </div>
         </div>
-
       </section>
 
       <!-- ========================================================
-           COMPONENT 5: BẢNG THƯ VIỆN BÁO CÁO MUA SẮM (GA4 REPORTS LIBRARY TABLE)
-           (Trích từ reports-library.html của bộ kit)
+           COMPONENT 5: BẢNG THƯ VIỆN BÁO CÁO MUA SẮM
            ======================================================== -->
-      <div class="w-full bg-white border border-slate-200 rounded-xl shadow-2xs font-sans select-none overflow-hidden ga-card">
+      <div id="table-card" class="w-full bg-white border border-slate-200 rounded-xl shadow-2xs font-sans select-none overflow-hidden ga-card">
         
-        <!-- Toolbar trên bảng (chuẩn reports-library.html) -->
         <div class="p-5 sm:p-6 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-white">
           <div class="flex items-center gap-2.5 text-slate-800">
             <h3 class="text-base font-semibold tracking-tight">Yêu cầu Mua sắm (Purchase Requests)</h3>
@@ -708,10 +646,7 @@
             </div>
           </div>
 
-          <!-- Nút Tạo mới + Ô tìm kiếm + Bộ lọc nhanh -->
           <div class="flex flex-wrap items-center gap-3">
-            
-            <!-- Lọc Phòng ban -->
             <select id="filter-department" onchange="handleFilterChange()" class="bg-white border border-slate-300 hover:border-slate-400 rounded-lg px-3 py-2 text-xs text-slate-700 outline-none focus:border-blue-500 cursor-pointer">
               <option value="ALL">Tất cả Phòng ban</option>
               <option value="it">IT & Kỹ thuật</option>
@@ -722,7 +657,6 @@
               <option value="finance">Kế toán - Tài chính</option>
             </select>
 
-            <!-- Lọc Trạng thái -->
             <select id="filter-status" onchange="handleFilterChange()" class="bg-white border border-slate-300 hover:border-slate-400 rounded-lg px-3 py-2 text-xs text-slate-700 outline-none focus:border-blue-500 cursor-pointer">
               <option value="ALL">Tất cả Trạng thái</option>
               <option value="PENDING">Chờ phê duyệt</option>
@@ -733,7 +667,6 @@
               <option value="DRAFT">Bản nháp</option>
             </select>
 
-            <!-- Ô tìm kiếm -->
             <div class="relative w-64">
               <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -749,50 +682,43 @@
               >
             </div>
 
-            <!-- Nút Tạo yêu cầu mới -->
-            <button type="button" id="btnCreateReport" onclick="openCreateModal()" class="ga-btn-primary flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer transition-colors shadow-2xs">
+            <button type="button" id="btnCreateReport" onclick="openCreateModal()" class="ga-btn-primary flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-lg cursor-pointer transition-colors shadow-2xs whitespace-nowrap">
               <span class="text-base leading-none font-bold">+</span>
               <span>Tạo yêu cầu mới</span>
             </button>
 
-            <!-- Nút Xuất CSV -->
             <button type="button" onclick="exportToCSV()" class="p-2 rounded-lg border border-slate-300 hover:bg-slate-100 text-slate-600 text-xs transition-colors" title="Xuất file CSV">
               <i class="fa-solid fa-file-excel text-emerald-600"></i>
             </button>
-
           </div>
         </div>
 
-        <!-- Bảng danh sách Báo cáo GA4 -->
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs text-slate-700 border-collapse">
             <thead class="ga-table-header bg-white text-[11px] font-medium text-slate-500 border-b border-slate-200">
               <tr>
-                <th scope="col" class="py-4 px-4 w-12 text-center">
+                <th scope="col" class="py-4 px-4 w-12 text-center whitespace-nowrap">
                   <input type="checkbox" id="selectAllReports" onchange="toggleSelectAll(this.checked)" class="w-4 h-4 rounded text-blue-600 border-slate-300 cursor-pointer accent-blue-600">
                 </th>
-                <th scope="col" class="py-4 px-4 w-12 font-medium">Loại</th>
+                <th scope="col" class="py-4 px-4 w-12 font-medium whitespace-nowrap">Loại</th>
                 <th scope="col" class="py-4 px-4 font-medium min-w-[220px] cursor-pointer hover:text-blue-600" onclick="handleSort('title')">
                   Tên hàng hóa / Dịch vụ
                 </th>
-                <th scope="col" class="py-4 px-4 font-medium w-32">Mã PR</th>
-                <th scope="col" class="py-4 px-4 font-medium min-w-[130px]">Phòng ban</th>
-                <th scope="col" class="py-4 px-4 font-medium min-w-[140px]">Người đề xuất</th>
-                <th scope="col" class="py-4 px-4 font-medium cursor-pointer hover:text-blue-600 text-right min-w-[120px]" onclick="handleSort('amount')">
+                <th scope="col" class="py-4 px-4 font-medium w-32 whitespace-nowrap">Mã PR</th>
+                <th scope="col" class="py-4 px-4 font-medium min-w-[130px] whitespace-nowrap">Phòng ban</th>
+                <th scope="col" class="py-4 px-4 font-medium min-w-[140px] whitespace-nowrap">Người đề xuất</th>
+                <th scope="col" class="py-4 px-4 font-medium cursor-pointer hover:text-blue-600 text-right min-w-[120px] whitespace-nowrap" onclick="handleSort('amount')">
                   Giá trị dự kiến <span id="sort-amount-arrow" class="inline-block text-[11px]">↓</span>
                 </th>
-                <th scope="col" class="py-4 px-4 font-medium text-center min-w-[90px]">Ưu tiên</th>
-                <th scope="col" class="py-4 px-4 font-medium text-center min-w-[120px]">Trạng thái</th>
-                <th scope="col" class="py-4 px-4 w-12 text-center">Thao tác</th>
+                <th scope="col" class="py-4 px-4 font-medium text-center min-w-[90px] whitespace-nowrap">Ưu tiên</th>
+                <th scope="col" class="py-4 px-4 font-medium text-center min-w-[120px] whitespace-nowrap">Trạng thái</th>
+                <th scope="col" class="py-4 px-4 min-w-[76px] text-center whitespace-nowrap">Thao tác</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100 bg-white" id="reportTableBody">
-              <!-- Render động qua JavaScript -->
-            </tbody>
+            <tbody class="divide-y divide-slate-100 bg-white" id="reportTableBody"></tbody>
           </table>
         </div>
 
-        <!-- Empty State -->
         <div id="empty-state" class="hidden py-14 text-center">
           <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto text-xl mb-2.5">
             <i class="fa-solid fa-folder-open"></i>
@@ -804,12 +730,8 @@
           </button>
         </div>
 
-        <!-- ========================================================
-             THANH PHÂN TRANG CHUẨN GA4 (từ reports-library.html)
-             ======================================================== -->
+        <!-- THANH PHÂN TRANG CHUẨN GA4 -->
         <div class="px-6 py-4 border-t border-slate-200 flex flex-wrap items-center justify-end gap-6 text-xs text-slate-600 bg-white select-none">
-          
-          <!-- Số mục trên mỗi trang -->
           <div class="flex items-center gap-2.5">
             <span class="text-slate-500 font-normal">Số mục trên mỗi trang:</span>
             <div class="relative">
@@ -826,11 +748,9 @@
             </div>
           </div>
 
-          <!-- Thông số phân trang (1 - 5/12) -->
           <div class="flex items-center gap-4">
-            <span id="paginationInfo" class="font-medium text-slate-700 min-w-[70px] text-right">1 – 5/12</span>
+            <span id="paginationInfo" class="font-medium text-slate-700 min-w-[70px] text-right">1 – 5/20</span>
             
-            <!-- Bộ 4 nút điều hướng GA4 -->
             <div class="flex items-center gap-1.5">
               <button type="button" id="btnFirstPage" onclick="changePage(1)" class="w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 transition-colors" title="Trang đầu">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -857,21 +777,16 @@
               </button>
             </div>
           </div>
-
         </div>
-
       </div>
 
     </main>
   </div>
 
   <!-- ========================================================
-       COMPONENT 6: RIGHT INSIGHTS DRAWER (từ insights-drawer.html)
-       Ngăn Kéo Chú Thích, Chi Tiết & Phê Duyệt Phiếu
+       COMPONENT 6: RIGHT INSIGHTS DRAWER
        ======================================================== -->
   <aside id="drawerAnnotations" class="fixed top-0 right-0 bottom-0 w-[440px] max-w-full bg-white border-l border-slate-200 flex flex-col h-full shrink-0 shadow-2xl z-50 transform translate-x-full drawer-panel select-none">
-    
-    <!-- Drawer Header -->
     <div class="px-6 py-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-slate-50/70">
       <div class="flex items-center gap-2.5">
         <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -889,7 +804,6 @@
       </button>
     </div>
 
-    <!-- Drawer Tabs -->
     <div class="flex border-b border-slate-200 bg-white text-xs font-semibold px-6 shrink-0">
       <button type="button" id="drawer-tab-detail" onclick="switchDrawerTab('detail')" class="py-3 px-3.5 border-b-2 border-blue-600 text-blue-600 transition-colors">
         Chi tiết đề xuất
@@ -899,15 +813,10 @@
       </button>
     </div>
 
-    <!-- Drawer Body -->
     <div class="flex-1 overflow-y-auto p-6 space-y-5 text-xs" id="drawer-body">
-      
-      <!-- Tab 1: Nội dung Chi tiết đề xuất -->
       <div id="drawer-view-detail" class="space-y-4">
         <div>
-          <h2 id="drawer-title" class="text-sm font-bold text-slate-900 leading-snug">
-            -
-          </h2>
+          <h2 id="drawer-title" class="text-sm font-bold text-slate-900 leading-snug">-</h2>
           <div class="mt-1 flex items-center gap-2 text-[11px] text-slate-400">
             <span id="drawer-category">Thiết bị phần cứng</span>
             <span>•</span>
@@ -915,7 +824,6 @@
           </div>
         </div>
 
-        <!-- Thẻ Giá trị & Ngân sách -->
         <div class="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-2.5">
           <div class="flex items-center justify-between">
             <span class="text-slate-500 text-[11px]">Tổng giá trị dự kiến:</span>
@@ -931,7 +839,6 @@
           </div>
         </div>
 
-        <!-- Người đề xuất -->
         <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-1.5">
           <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Người tạo yêu cầu</span>
           <div class="flex items-center gap-3 mt-1.5">
@@ -943,7 +850,6 @@
           </div>
         </div>
 
-        <!-- Nhà cung cấp & Link báo giá -->
         <div class="p-4 rounded-xl border border-slate-200 bg-white space-y-2">
           <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Thông tin nhà cung cấp</span>
           <div class="flex items-center justify-between">
@@ -958,15 +864,11 @@
           </div>
         </div>
 
-        <!-- Lý do & Giải trình -->
         <div class="space-y-1.5">
           <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Lý do & Mục đích mua sắm</span>
-          <p id="drawer-purpose" class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 leading-relaxed text-[11px]">
-            -
-          </p>
+          <p id="drawer-purpose" class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 leading-relaxed text-[11px]">-</p>
         </div>
 
-        <!-- Danh mục vật tư chi tiết -->
         <div class="space-y-2">
           <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Danh mục mặt hàng</span>
           <div class="border border-slate-200 rounded-xl overflow-hidden">
@@ -979,33 +881,23 @@
                   <th class="py-2.5 px-3 text-right">Thành tiền</th>
                 </tr>
               </thead>
-              <tbody id="drawer-items-list" class="divide-y divide-slate-100">
-                <!-- Render từ code -->
-              </tbody>
+              <tbody id="drawer-items-list" class="divide-y divide-slate-100"></tbody>
             </table>
           </div>
         </div>
       </div>
 
-      <!-- Tab 2: Nhật ký Phê duyệt (Timeline) -->
       <div id="drawer-view-timeline" class="space-y-4 hidden">
         <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">Tiến trình phê duyệt (Audit Trail)</span>
-        <div class="relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200" id="drawer-timeline-container">
-          <!-- Render timeline -->
-        </div>
+        <div class="relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200" id="drawer-timeline-container"></div>
       </div>
-
     </div>
 
-    <!-- Drawer Footer Actions -->
-    <div class="p-5 border-t border-slate-200 bg-slate-50/80 flex items-center justify-between gap-3 shrink-0" id="drawer-actions">
-      <!-- Nút duyệt, từ chối, bổ sung thông tin -->
-    </div>
-
+    <div class="p-5 border-t border-slate-200 bg-slate-50/80 flex items-center justify-between gap-3 shrink-0" id="drawer-actions"></div>
   </aside>
 
   <!-- ========================================================
-       FLOATING BULK ACTION BAR (Thanh tác vụ hàng loạt)
+       FLOATING BULK ACTION BAR
        ======================================================== -->
   <div id="bulk-action-bar" class="bulk-action-bar fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-800 flex items-center gap-4">
     <div class="flex items-center gap-2 pr-2 border-r border-slate-700 text-xs">
@@ -1040,8 +932,6 @@
        ======================================================== -->
   <div id="account-picker-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-      
-      <!-- Modal Header -->
       <div class="px-7 py-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
         <div>
           <h3 class="text-sm font-bold text-slate-900">Chọn Phòng Ban & Quản Lý Hạn Mức Ngân Sách</h3>
@@ -1052,23 +942,15 @@
         </button>
       </div>
 
-      <!-- Modal Body -->
       <div class="flex-1 overflow-y-auto p-7 grid grid-cols-1 md:grid-cols-2 gap-5">
-        <!-- Cột 1: Danh sách phòng ban -->
         <div class="space-y-2.5">
           <span class="text-xs font-bold text-slate-600 uppercase tracking-wider block">Danh sách Phòng ban</span>
-          <div class="space-y-2" id="picker-dept-list">
-            <!-- Render từ JS -->
-          </div>
+          <div class="space-y-2" id="picker-dept-list"></div>
         </div>
 
-        <!-- Cột 2: Chi tiết hạn mức phòng ban đang chọn -->
-        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50 flex flex-col justify-between" id="picker-dept-detail">
-          <!-- Render từ JS -->
-        </div>
+        <div class="p-5 rounded-xl border border-slate-200 bg-slate-50 flex flex-col justify-between" id="picker-dept-detail"></div>
       </div>
 
-      <!-- Modal Footer -->
       <div class="px-7 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
         <button onclick="selectDepartmentFromPicker('ALL')" class="text-xs text-blue-600 font-semibold hover:underline">
           Xem tất cả phòng ban
@@ -1077,16 +959,14 @@
           Đóng
         </button>
       </div>
-
     </div>
   </div>
 
   <!-- ========================================================
-       MODAL TẠO MỚI PHIẾU MUA SẮM (VỚI REAL-TIME BUDGET CHECK)
+       MODAL TẠO MỚI PHIẾU MUA SẮM
        ======================================================== -->
   <div id="create-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-      
       <div class="px-7 py-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
         <div>
           <h2 class="text-base font-bold text-slate-900">Tạo Phiếu Đề Xuất Mua Sắm (PR)</h2>
@@ -1182,7 +1062,6 @@
           </div>
         </div>
 
-        <!-- Real-time Budget Check Widget -->
         <div id="budget-preview-box" class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
           <div class="flex items-center justify-between">
             <span class="font-bold text-slate-700 flex items-center gap-1.5">
@@ -1230,7 +1109,6 @@
           </button>
         </div>
       </form>
-
     </div>
   </div>
 
@@ -1265,11 +1143,10 @@
   </div>
 
   <!-- ========================================================
-       MODAL: 20 YÊU CẦU & SPEC (PRD & BUSINESS DEMO SCENARIOS)
+       MODAL: 20 YÊU CẦU & SPEC
        ======================================================== -->
   <div id="spec-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs">
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-150">
-      
       <div class="px-7 py-5 border-b border-slate-200 flex items-center justify-between bg-slate-50">
         <div>
           <div class="flex items-center gap-2">
@@ -1290,7 +1167,7 @@
         </button>
         <button onclick="switchSpecTab('scenarios')" id="spec-tab-scenarios" class="py-3.5 px-4 border-b-2 border-transparent hover:text-slate-900 transition-colors flex items-center gap-1.5">
           <i class="fa-solid fa-boxes-stacked"></i>
-          <span>Phần B: 12 Kịch Bản Dữ Liệu Demo</span>
+          <span>Phần B: 20 Kịch Bản Dữ Liệu Demo</span>
         </button>
         <button onclick="switchSpecTab('roles')" id="spec-tab-roles" class="py-3.5 px-4 border-b-2 border-transparent hover:text-slate-900 transition-colors flex items-center gap-1.5">
           <i class="fa-solid fa-users-gear"></i>
@@ -1299,8 +1176,6 @@
       </div>
 
       <div class="overflow-y-auto p-7 space-y-4 flex-1 text-xs text-slate-700">
-        
-        <!-- Tab 1: 10 Yêu Cầu Chức Năng -->
         <div id="spec-content-func" class="space-y-3.5">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/50">
@@ -1346,7 +1221,6 @@
           </div>
         </div>
 
-        <!-- Tab 2: 12 Kịch Bản Demo -->
         <div id="spec-content-scenarios" class="space-y-3 hidden">
           <div class="border border-slate-200 rounded-xl overflow-hidden">
             <table class="w-full text-left text-xs">
@@ -1360,14 +1234,11 @@
                   <th class="py-3 px-3.5">Ý nghĩa kịch bản</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-100 bg-white" id="spec-scenarios-table-body">
-                <!-- Render từ code -->
-              </tbody>
+              <tbody class="divide-y divide-slate-100 bg-white" id="spec-scenarios-table-body"></tbody>
             </table>
           </div>
         </div>
 
-        <!-- Tab 3: Ma Trận Phân Quyền -->
         <div id="spec-content-roles" class="space-y-3.5 hidden">
           <div class="p-5 rounded-xl border border-slate-200 bg-slate-50 space-y-2.5 text-xs">
             <h4 class="font-bold text-slate-800 mb-2">Phân Cấp Thẩm Quyền Chi Tiêu (Approval Threshold Matrix)</h4>
@@ -1389,7 +1260,6 @@
             </div>
           </div>
         </div>
-
       </div>
 
       <div class="px-7 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
@@ -1398,7 +1268,6 @@
           Đóng cửa sổ
         </button>
       </div>
-
     </div>
   </div>
 

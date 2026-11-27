@@ -37,12 +37,12 @@ const AppState = {
     {
       id: "notif-1",
       targetType: "PR",
-      targetId: "PR-2026-1001",
+      targetId: "PR-2026-1012",
       urgent: true,
       badge: "Cần duyệt gấp",
       badgeClass: "bg-rose-100 text-rose-700 border-rose-200",
       icon: "fa-triangle-exclamation text-rose-600",
-      title: "PR-2026-1001: Server GPU AI (310.000.000 đ)",
+      title: "PR-2026-1012: AI Training Server (310.000.000 đ)",
       desc: "Khoản chi > 200tr, Kế toán đã thẩm định ngân sách. Đang chờ Giám đốc duyệt bước cuối.",
       time: "10 phút trước",
       unread: true
@@ -50,12 +50,12 @@ const AppState = {
     {
       id: "notif-2",
       targetType: "PR",
-      targetId: "PR-2026-1003",
+      targetId: "PR-2026-1013",
       urgent: true,
       badge: "Chờ duyệt cấp 1",
       badgeClass: "bg-amber-100 text-amber-700 border-amber-200",
       icon: "fa-clock text-amber-600",
-      title: "PR-2026-1003: 6 Màn hình Dell UltraSharp (48.000.000 đ)",
+      title: "PR-2026-1013: Chuột & bàn phím cơ QA (16.800.000 đ)",
       desc: "Nhân viên IT vừa gửi đề xuất mua thiết bị mới. Trưởng bộ phận cần thẩm định trước 17:00.",
       time: "45 phút trước",
       unread: true
@@ -63,26 +63,26 @@ const AppState = {
     {
       id: "notif-3",
       targetType: "PR",
-      targetId: "PR-2026-1004",
+      targetId: "PR-2026-1005",
       urgent: false,
       badge: "Cần bổ sung",
       badgeClass: "bg-purple-100 text-purple-700 border-purple-200",
       icon: "fa-circle-info text-purple-600",
-      title: "PR-2026-1004: Bản quyền Jira & Confluence (96.000.000 đ)",
-      desc: "Phòng Tài chính yêu cầu bổ sung ít nhất 2 bảng báo giá đại lý ủy quyền đối chiếu.",
+      title: "PR-2026-1005: 30 Bàn ghế công thái học (68.000.000 đ)",
+      desc: "Phòng Tài chính yêu cầu bổ sung thêm báo giá đối chiếu từ Sihoo và MerryFair.",
       time: "2 giờ trước",
       unread: true
     },
     {
       id: "notif-4",
       targetType: "BUDGET",
-      targetId: "DP-MKT",
+      targetId: "rnd",
       urgent: false,
       badge: "Cảnh báo quỹ",
       badgeClass: "bg-orange-100 text-orange-800 border-orange-200",
       icon: "fa-chart-pie text-orange-600",
-      title: "Phòng Marketing đã sử dụng 82% ngân sách Q4",
-      desc: "Hạn mức còn lại 88.000.000 đ / 500tr. Kiểm tra chi tiết số dư ngân sách 6 phòng ban.",
+      title: "Phòng R&D đã sử dụng 87% ngân sách quý",
+      desc: "Hạn mức còn lại 90.000.000 đ / 700tr. Kiểm tra chi tiết số dư ngân sách 6 phòng ban.",
       time: "Hôm qua",
       unread: true
     },
@@ -94,8 +94,8 @@ const AppState = {
       badge: "Đã phê duyệt",
       badgeClass: "bg-emerald-100 text-emerald-700 border-emerald-200",
       icon: "fa-circle-check text-emerald-600",
-      title: "PR-2026-1002: Bàn làm việc Ergonomic (12.500.000 đ)",
-      desc: "Phiếu đã được Trưởng bộ phận duyệt. Đã sẵn sàng lập đơn đặt hàng PO.",
+      title: "PR-2026-1002: 05 Màn hình Dell UltraSharp 4K (54.500.000 đ)",
+      desc: "Phiếu đã hoàn tất phê duyệt. Sẵn sàng lập đơn đặt hàng PO.",
       time: "Hôm qua",
       unread: false
     }
@@ -107,50 +107,34 @@ const AppState = {
 // 2. KHỞI TẠO ỨNG DỤNG (INITIALIZATION)
 // ========================================================
 document.addEventListener('DOMContentLoaded', () => {
-  // Đọc theme từ localStorage nếu có
   const savedTheme = localStorage.getItem('paw_theme') || 'analytic';
   switchTheme(savedTheme, false);
 
-  // Cập nhật giao diện theo vai trò mặc định
   updateRoleUI();
-
-  // Khởi tạo render dữ liệu
   renderAll();
-
-  // Khởi tạo thông báo
   renderNotifications();
-
-  // Khởi tạo kịch bản demo trong Spec Modal
   renderSpecScenarios();
 
-  // Lắng nghe sự kiện click bên ngoài để đóng các menu dropdown / popovers
   document.addEventListener('click', (e) => {
-    // Đóng các popover header nếu click ra ngoài
-    const popoverWrappers = document.querySelectorAll('[data-popover-wrapper]');
-    popoverWrappers.forEach(wrapper => {
-      if (!wrapper.contains(e.target)) {
+    const clickedWrapper = e.target.closest('[data-popover-wrapper]');
+    document.querySelectorAll('[data-popover-wrapper]').forEach(wrapper => {
+      if (wrapper !== clickedWrapper) {
         const panel = wrapper.querySelector('.popover-panel');
-        if (panel && !panel.classList.contains('hidden')) {
-          panel.classList.add('hidden');
-        }
+        if (panel) panel.classList.add('hidden');
       }
     });
 
-    // Đóng menu 3 chấm trên bảng nếu click ra ngoài
     if (!e.target.closest('.row-action-menu-btn') && !e.target.closest('.row-action-dropdown')) {
       closeAllRowMenus();
     }
   });
 
-  // Phím tắt bàn phím tiện lợi
   document.addEventListener('keydown', (e) => {
-    // Ctrl + / hoặc Cmd + / để focus vào ô tìm kiếm toàn cục
     if ((e.ctrlKey || e.metaKey) && e.key === '/') {
       e.preventDefault();
       const input = document.getElementById('globalSearchInput');
       if (input) input.focus();
     }
-    // Phím Escape để đóng Drawer hoặc Modal
     if (e.key === 'Escape') {
       closeDetailDrawer();
       closeCreateModal();
@@ -171,20 +155,17 @@ function switchTheme(newTheme, showNotification = true) {
   const body = document.body;
   const btnAnalytic = document.getElementById('btn-theme-analytic');
   const btnShadcn = document.getElementById('btn-theme-shadcn');
-  const bannerIcon = document.getElementById('banner-icon');
-  const bannerTitle = document.getElementById('banner-title');
-  const bannerDesc = document.getElementById('banner-desc');
-  const bannerSwitchTo = document.getElementById('banner-switch-to-label');
-  const breadcrumbBar = document.getElementById('shadcn-breadcrumb-bar');
-  const alertsSection = document.getElementById('shadcn-alerts-section');
 
   if (newTheme === 'shadcn') {
     body.classList.remove('theme-analytic');
     body.classList.add('theme-shadcn');
 
-    // Nút switch giao diện chuẩn Image 4 (media_1795162030296_c222113f.png)
-    btnShadcn.className = "px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 bg-zinc-900 text-white shadow-2xs font-semibold text-xs cursor-pointer";
-    btnAnalytic.className = "px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 text-zinc-500 hover:text-zinc-900 text-xs font-medium cursor-pointer";
+    if (btnShadcn) {
+      btnShadcn.className = "px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 bg-zinc-900 text-white shadow-2xs font-semibold text-xs cursor-pointer";
+    }
+    if (btnAnalytic) {
+      btnAnalytic.className = "px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 text-zinc-500 hover:text-zinc-900 text-xs font-medium cursor-pointer";
+    }
 
     if (showNotification) {
       showToast("Chuyển sang shadcn/ui", "Đang sử dụng các components chuẩn shadcn/ui (Breadcrumb, Dropdown Menu, Alert Cards, Stack Trace).", "info");
@@ -193,8 +174,12 @@ function switchTheme(newTheme, showNotification = true) {
     body.classList.remove('theme-shadcn');
     body.classList.add('theme-analytic');
 
-    btnAnalytic.className = "px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 bg-white text-blue-600 shadow-2xs font-semibold text-xs cursor-pointer";
-    btnShadcn.className = "px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 text-slate-600 hover:text-slate-900 text-xs font-medium cursor-pointer";
+    if (btnAnalytic) {
+      btnAnalytic.className = "px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 bg-white text-blue-600 shadow-2xs font-semibold text-xs cursor-pointer";
+    }
+    if (btnShadcn) {
+      btnShadcn.className = "px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 text-slate-600 hover:text-slate-900 text-xs font-medium cursor-pointer";
+    }
 
     if (showNotification) {
       showToast("Chuyển sang Analytic Kit", "Đang sử dụng trọn bộ components chuẩn Google Analytics Components Kit.", "info");
@@ -214,7 +199,7 @@ function toggleTheme() {
 }
 
 // ========================================================
-// 4. COMPONENT SIDEBAR GA4 INTERACTIONS (từ sidebar.html)
+// 4. COMPONENT SIDEBAR GA4 INTERACTIONS
 // ========================================================
 function toggleSidebar() {
   const sidebar = document.getElementById('mainSidebar');
@@ -226,12 +211,12 @@ function toggleSidebar() {
   if (AppState.sidebarCollapsed) {
     sidebar.classList.remove('w-60');
     sidebar.classList.add('w-16', 'sidebar-collapsed');
-    icon.classList.add('rotate-180');
+    if (icon) icon.classList.add('rotate-180');
     labels.forEach(el => el.classList.add('hidden'));
   } else {
     sidebar.classList.remove('w-16', 'sidebar-collapsed');
     sidebar.classList.add('w-60');
-    icon.classList.remove('rotate-180');
+    if (icon) icon.classList.remove('rotate-180');
     labels.forEach(el => el.classList.remove('hidden'));
   }
 }
@@ -242,20 +227,23 @@ function setActiveNav(el, key) {
     item.classList.add('text-slate-600', 'hover:bg-slate-100');
   });
 
-  el.classList.remove('text-slate-600', 'hover:bg-slate-100');
-  el.classList.add('bg-blue-600', 'text-white', 'shadow-2xs', 'font-semibold');
+  if (el) {
+    el.classList.remove('text-slate-600', 'hover:bg-slate-100');
+    el.classList.add('bg-blue-600', 'text-white', 'shadow-2xs', 'font-semibold');
+  }
 }
 
 function filterByPending() {
   AppState.filters.status = 'PENDING';
-  document.getElementById('filter-status').value = 'PENDING';
+  const statusEl = document.getElementById('filter-status');
+  if (statusEl) statusEl.value = 'PENDING';
   AppState.pagination.page = 1;
   renderAll();
   showToast("Bộ lọc", "Đang hiển thị danh sách các yêu cầu Cần phê duyệt.", "info");
 }
 
 // ========================================================
-// 5. ACCORDION WORKFLOW INTERACTION (từ accordion.html)
+// 5. ACCORDION WORKFLOW INTERACTION
 // ========================================================
 function toggleAccordion(contentId) {
   const body = document.getElementById(contentId);
@@ -267,28 +255,22 @@ function toggleAccordion(contentId) {
 }
 
 // ========================================================
-// 6. HEADER UTILITIES & POPOVERS (từ header-utilities.html)
+// 6. HEADER UTILITIES & POPOVERS
 // ========================================================
-function togglePopover(panelId, event) {
+function openHeaderPopover(panelId, event) {
   if (event) {
     event.preventDefault();
-    event.stopPropagation();
   }
   const targetPanel = document.getElementById(panelId);
   if (!targetPanel) return;
 
   const isClosed = targetPanel.classList.contains('hidden');
 
-  // Đóng các popover khác
   document.querySelectorAll('.popover-panel').forEach(p => {
     if (p !== targetPanel) p.classList.add('hidden');
   });
 
-  if (isClosed) {
-    targetPanel.classList.remove('hidden');
-  } else {
-    targetPanel.classList.add('hidden');
-  }
+  targetPanel.classList.toggle('hidden', !isClosed);
 }
 
 function toggleUserRoleMenu(event) {
@@ -301,7 +283,6 @@ function toggleUserRoleMenu(event) {
 
   const isClosed = targetPanel.classList.contains('hidden');
 
-  // Đóng các popover khác
   document.querySelectorAll('.popover-panel').forEach(p => {
     if (p !== targetPanel) p.classList.add('hidden');
   });
@@ -314,64 +295,62 @@ function toggleUserRoleMenu(event) {
 }
 
 // ========================================================
-// 6.1 APPS LAUNCHER (ICON 1 - 9 Ô VUÔNG)
+// 6.1 APPS LAUNCHER
 // ========================================================
 function launchApp(action) {
-  // Đóng popover
   const pop = document.getElementById('popoverProducts');
   if (pop) pop.classList.add('hidden');
 
   switch (action) {
     case 'PR':
-      // Reset filter về tất cả PR
       AppState.filters.status = 'ALL';
       AppState.filters.search = '';
-      const searchInput = document.getElementById('search-input');
-      if (searchInput) searchInput.value = '';
+      const reportSearch = document.getElementById('reportSearchInput');
+      const globalSearch = document.getElementById('globalSearchInput');
+      if (reportSearch) reportSearch.value = '';
+      if (globalSearch) globalSearch.value = '';
       const statusFilterEl = document.getElementById('filter-status');
       if (statusFilterEl) statusFilterEl.value = 'ALL';
-      renderTable();
+      AppState.pagination.page = 1;
+      renderAll();
       scrollToTable();
       showToast('Quản lý Mua sắm (PR)', 'Đã mở danh sách toàn bộ yêu cầu mua sắm.', 'info');
       break;
 
     case 'PO':
-      // Lọc các đơn đã đặt hàng PO
       AppState.filters.status = 'ORDERED';
       const statusSelect = document.getElementById('filter-status');
       if (statusSelect) statusSelect.value = 'ORDERED';
-      renderTable();
+      AppState.pagination.page = 1;
+      renderAll();
       scrollToTable();
       showToast('Theo dõi Đơn Hàng PO', 'Đang hiển thị danh sách các phiếu đã được phê duyệt chuyển sang PO.', 'success');
       break;
 
     case 'BUDGET':
-      // Mở modal quản lý ngân sách phòng ban
       openAccountPickerModal();
       showToast('Hạn mức Ngân sách', 'Mở bảng phân bổ và theo dõi số dư quỹ 6 phòng ban.', 'info');
       break;
 
     case 'NEW_PR':
-      // Mở modal tạo PR mới
-      openNewPRModal();
+      openCreateModal();
       break;
 
     case 'EXPORT':
-      // Xuất toàn bộ file CSV
       exportAllCSV();
       break;
 
     case 'PRINT':
-      // In tổng hợp
-      printTable();
+      window.print();
       break;
 
     case 'RESET':
-      // Khôi phục 12 PR gốc
       AppState.requests = JSON.parse(JSON.stringify(INITIAL_PURCHASE_REQUESTS));
+      AppState.departments = JSON.parse(JSON.stringify(INITIAL_DEPARTMENTS));
       AppState.selectedIds = new Set();
+      AppState.pagination.page = 1;
       renderAll();
-      showToast('Khôi phục dữ liệu', 'Đã đặt lại 12 kịch bản mua hàng mẫu ban đầu thành công.', 'success');
+      showToast('Khôi phục dữ liệu', 'Đã đặt lại 20 kịch bản mua hàng mẫu ban đầu thành công.', 'success');
       break;
 
     case 'EXT_CONTRACT':
@@ -434,7 +413,7 @@ function exportAllCSV() {
 }
 
 // ========================================================
-// 6.2 NOTIFICATION CENTER (ICON 3 - CHUÔNG THÔNG BÁO)
+// 6.2 NOTIFICATION CENTER
 // ========================================================
 function renderNotifications() {
   const container = document.getElementById('notifications-list');
@@ -444,7 +423,6 @@ function renderNotifications() {
   const filter = AppState.notifFilter || 'all';
   const displayed = filter === 'urgent' ? notifs.filter(n => n.urgent) : notifs;
 
-  // Cập nhật số đếm chưa đọc
   const unreadCount = notifs.filter(n => n.unread).length;
 
   const badgeEl = document.getElementById('notif-badge');
@@ -500,15 +478,12 @@ function openNotificationItem(notifId) {
   const notif = AppState.notifications.find(n => n.id === notifId);
   if (!notif) return;
 
-  // Đánh dấu đã đọc
   notif.unread = false;
   renderNotifications();
 
-  // Đóng popover
   const pop = document.getElementById('popoverNotifications');
   if (pop) pop.classList.add('hidden');
 
-  // Thực hiện tác vụ tương ứng
   if (notif.targetType === 'PR') {
     openDetailDrawer(notif.targetId);
     showToast('Mở chi tiết phiếu', `Đang xem phiếu ${notif.targetId} từ thông báo.`, 'info');
@@ -544,7 +519,8 @@ function filterPendingPRsFromNotif() {
   AppState.filters.status = 'PENDING';
   const statusFilterEl = document.getElementById('filter-status');
   if (statusFilterEl) statusFilterEl.value = 'PENDING';
-  renderTable();
+  AppState.pagination.page = 1;
+  renderAll();
   scrollToTable();
   showToast('Bộ lọc nhanh', 'Đang hiển thị danh sách các phiếu đang chờ duyệt.', 'info');
 }
@@ -563,7 +539,6 @@ function switchRole(roleId) {
   AppState.currentRole = roleId;
   updateRoleUI();
 
-  // Đóng popover role
   const roleMenu = document.getElementById('popoverRoleMenu');
   if (roleMenu) roleMenu.classList.add('hidden');
 
@@ -585,19 +560,16 @@ function updateRoleUI() {
   const role = USER_ROLES[AppState.currentRole];
   if (!role) return;
 
-  // Cập nhật thông tin trên thanh Header Pill
   const userNameEl = document.getElementById('current-user-name');
   if (userNameEl) userNameEl.textContent = role.userName;
 
   const userRoleEl = document.getElementById('current-user-role-label');
   if (userRoleEl) userRoleEl.textContent = role.name;
 
-  // Chữ cái viết tắt (Initials)
   const initials = role.userName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
   const avatarInitialsEl = document.getElementById('current-user-avatar-initials');
   if (avatarInitialsEl) avatarInitialsEl.textContent = initials;
 
-  // Cập nhật thẻ tài khoản đang hoạt động trong Dropdown Popover
   const popName = document.getElementById('popover-current-user-name');
   if (popName) popName.textContent = role.userName;
 
@@ -610,7 +582,6 @@ function updateRoleUI() {
   const popAvatar = document.getElementById('popover-avatar-preview');
   if (popAvatar) popAvatar.textContent = initials;
 
-  // Tích xanh chọn vai trò trong danh sách 4 tài khoản
   document.querySelectorAll('.role-opt').forEach(opt => {
     const isCurrent = opt.dataset.role === AppState.currentRole;
     const checkIcon = opt.querySelector('.check-icon');
@@ -629,20 +600,23 @@ function updateRoleUI() {
 }
 
 // ========================================================
-// 8. POPUP ACCOUNT & DEPARTMENT PICKER (từ popup-picker.html)
+// 8. POPUP ACCOUNT & DEPARTMENT PICKER
 // ========================================================
 function openAccountPickerModal() {
   renderPickerDepartments();
-  document.getElementById('account-picker-modal').classList.remove('hidden');
+  const modal = document.getElementById('account-picker-modal');
+  if (modal) modal.classList.remove('hidden');
 }
 
 function closeAccountPickerModal() {
-  document.getElementById('account-picker-modal').classList.add('hidden');
+  const modal = document.getElementById('account-picker-modal');
+  if (modal) modal.classList.add('hidden');
 }
 
 function renderPickerDepartments(selectedDeptId = null) {
   const listEl = document.getElementById('picker-dept-list');
   const detailEl = document.getElementById('picker-dept-detail');
+  if (!listEl || !detailEl) return;
 
   const currentDept = selectedDeptId || (AppState.filters.department !== 'ALL' ? AppState.filters.department : 'it');
   const deptData = AppState.departments.find(d => d.id === currentDept) || AppState.departments[0];
@@ -660,7 +634,6 @@ function renderPickerDepartments(selectedDeptId = null) {
     `;
   }).join('');
 
-  // Cột chi tiết
   const remaining = deptData.totalBudget - deptData.usedBudget;
   const pct = Math.round((deptData.usedBudget / deptData.totalBudget) * 100);
 
@@ -697,19 +670,23 @@ function renderPickerDepartments(selectedDeptId = null) {
 
 function selectDepartmentFromPicker(deptId) {
   AppState.filters.department = deptId;
-  document.getElementById('filter-department').value = deptId;
+  const filterDeptEl = document.getElementById('filter-department');
+  if (filterDeptEl) filterDeptEl.value = deptId;
   AppState.pagination.page = 1;
 
-  if (deptId === 'ALL') {
-    document.getElementById('currentPropertyText').textContent = "Tất cả Phòng ban";
-  } else {
-    const d = AppState.departments.find(dept => dept.id === deptId);
-    if (d) document.getElementById('currentPropertyText').textContent = d.name;
+  const propTextEl = document.getElementById('currentPropertyText');
+  if (propTextEl) {
+    if (deptId === 'ALL') {
+      propTextEl.textContent = "Tất cả Phòng ban";
+    } else {
+      const d = AppState.departments.find(dept => dept.id === deptId);
+      if (d) propTextEl.textContent = d.name;
+    }
   }
 
   closeAccountPickerModal();
   renderAll();
-  showToast("Cập nhật bộ lọc", `Đã lọc hiển thị theo: ${document.getElementById('currentPropertyText').textContent}`, "info");
+  showToast("Cập nhật bộ lọc", `Đã lọc hiển thị theo: ${propTextEl ? propTextEl.textContent : deptId}`, "info");
 }
 
 function openDeptBudgetModal() {
@@ -738,19 +715,24 @@ function renderKPIs() {
   const remainingBudget = totalDeptBudget - totalUsedBudget;
   const usedPercent = Math.round((totalUsedBudget / totalDeptBudget) * 100);
 
-  document.getElementById('kpi-total-pr').textContent = total;
-  document.getElementById('kpi-pending-pr').textContent = pendingRequests.length;
-  document.getElementById('kpi-pending-val').textContent = formatCompactVND(pendingVal);
-  document.getElementById('kpi-approved-pr').textContent = approvedRequests.length;
-  document.getElementById('kpi-approved-val').textContent = formatCompactVND(approvedVal);
-
-  document.getElementById('kpi-remaining-budget').textContent = formatCompactVND(remainingBudget);
-  document.getElementById('kpi-budget-percent').textContent = `${usedPercent}%`;
-
+  const elTotal = document.getElementById('kpi-total-pr');
+  const elPending = document.getElementById('kpi-pending-pr');
+  const elPendingVal = document.getElementById('kpi-pending-val');
+  const elApproved = document.getElementById('kpi-approved-pr');
+  const elApprovedVal = document.getElementById('kpi-approved-val');
+  const elRemaining = document.getElementById('kpi-remaining-budget');
+  const elPct = document.getElementById('kpi-budget-percent');
   const budgetBar = document.getElementById('kpi-budget-bar');
-  budgetBar.style.width = `${Math.min(usedPercent, 100)}%`;
 
-  // Cập nhật badge trên sidebar
+  if (elTotal) elTotal.textContent = total;
+  if (elPending) elPending.textContent = pendingRequests.length;
+  if (elPendingVal) elPendingVal.textContent = formatCompactVND(pendingVal);
+  if (elApproved) elApproved.textContent = approvedRequests.length;
+  if (elApprovedVal) elApprovedVal.textContent = formatCompactVND(approvedVal);
+  if (elRemaining) elRemaining.textContent = formatCompactVND(remainingBudget);
+  if (elPct) elPct.textContent = `${usedPercent}%`;
+  if (budgetBar) budgetBar.style.width = `${Math.min(usedPercent, 100)}%`;
+
   const sidebarPendingBadge = document.getElementById('sidebar-pending-badge');
   if (sidebarPendingBadge) {
     sidebarPendingBadge.textContent = pendingRequests.length;
@@ -760,7 +742,6 @@ function renderKPIs() {
 function getProcessedRequests() {
   let list = [...AppState.requests];
 
-  // 1. Search
   if (AppState.filters.search.trim()) {
     const q = AppState.filters.search.toLowerCase().trim();
     list = list.filter(r =>
@@ -772,22 +753,18 @@ function getProcessedRequests() {
     );
   }
 
-  // 2. Department Filter
   if (AppState.filters.department !== 'ALL') {
     list = list.filter(r => r.department === AppState.filters.department);
   }
 
-  // 3. Status Filter
   if (AppState.filters.status !== 'ALL') {
     list = list.filter(r => r.status === AppState.filters.status);
   }
 
-  // 4. Priority Filter
   if (AppState.filters.priority !== 'ALL') {
     list = list.filter(r => r.priority === AppState.filters.priority);
   }
 
-  // 5. Sorting
   list.sort((a, b) => {
     let valA = a[AppState.sort.column];
     let valB = b[AppState.sort.column];
@@ -809,28 +786,32 @@ function getProcessedRequests() {
 }
 
 // ========================================================
-// 10. COMPONENT BẢNG THƯ VIỆN BÁO CÁO (từ reports-library.html)
+// 10. COMPONENT BẢNG THƯ VIỆN BÁO CÁO
 // ========================================================
 function renderTable() {
   const tbody = document.getElementById('reportTableBody');
   const emptyState = document.getElementById('empty-state');
+  if (!tbody) return;
+
   const processed = getProcessedRequests();
 
   if (processed.length === 0) {
     tbody.innerHTML = '';
-    emptyState.classList.remove('hidden');
-    document.getElementById('selectAllReports').checked = false;
+    if (emptyState) emptyState.classList.remove('hidden');
+    const selectAllEl = document.getElementById('selectAllReports');
+    if (selectAllEl) selectAllEl.checked = false;
     updateBulkActionBar();
     return;
   }
 
-  emptyState.classList.add('hidden');
+  if (emptyState) emptyState.classList.add('hidden');
 
   const startIdx = (AppState.pagination.page - 1) * AppState.pagination.pageSize;
   const paginatedList = processed.slice(startIdx, startIdx + AppState.pagination.pageSize);
 
   const allCurrentSelected = paginatedList.length > 0 && paginatedList.every(r => AppState.selectedIds.has(r.id));
-  document.getElementById('selectAllReports').checked = allCurrentSelected;
+  const selectAllEl = document.getElementById('selectAllReports');
+  if (selectAllEl) selectAllEl.checked = allCurrentSelected;
 
   const isShadcn = AppState.theme === 'shadcn';
 
@@ -841,7 +822,6 @@ function renderTable() {
     const badgeClass = isShadcn ? statusCfg.badgeShadcn : statusCfg.badgeAnalytic;
     const priorityBadgeClass = isShadcn ? priorityCfg.badgeShadcn : priorityCfg.badgeAnalytic;
 
-    // SVG icon đại diện loại hàng hóa theo GA4 UI Kit
     let typeSvg = `
       <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
@@ -863,7 +843,6 @@ function renderTable() {
 
     return `
       <tr class="hover:bg-slate-50/80 transition-colors cursor-pointer report-row ${isSelected ? 'bg-blue-50/30' : ''}">
-        <!-- Checkbox chọn dòng -->
         <td class="py-4 px-4 text-center" onclick="event.stopPropagation()">
           <input 
             type="checkbox" 
@@ -873,14 +852,12 @@ function renderTable() {
           >
         </td>
 
-        <!-- Cột Loại (Icon SVG) -->
         <td class="py-4 px-4 text-slate-600" onclick="openDetailDrawer('${pr.id}')">
           <div class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center">
             ${typeSvg}
           </div>
         </td>
 
-        <!-- Cột Tên hàng hóa / dịch vụ -->
         <td class="py-4 px-4 min-w-[220px]" onclick="openDetailDrawer('${pr.id}')">
           <div class="font-medium text-slate-800 line-clamp-1 hover:text-blue-600 text-xs" title="${pr.title}">
             ${pr.title}
@@ -888,18 +865,15 @@ function renderTable() {
           <div class="text-[10px] text-slate-400 mt-1 line-clamp-1">${pr.purpose}</div>
         </td>
 
-        <!-- Cột Mã PR & Ngày tạo -->
         <td class="py-4 px-4 whitespace-nowrap" onclick="openDetailDrawer('${pr.id}')">
           <div class="font-bold ${isShadcn ? 'text-zinc-900 font-mono' : 'text-blue-600'} text-xs">${pr.id}</div>
           <div class="text-[10px] text-slate-400 mt-1">${pr.createdAt}</div>
         </td>
 
-        <!-- Cột Phòng ban -->
         <td class="py-4 px-4 whitespace-nowrap" onclick="openDetailDrawer('${pr.id}')">
           <span class="text-xs text-slate-700">${pr.departmentName}</span>
         </td>
 
-        <!-- Cột Người đề xuất -->
         <td class="py-4 px-4 whitespace-nowrap" onclick="openDetailDrawer('${pr.id}')">
           <div class="flex items-center gap-2.5">
             <img src="${pr.requester.avatar}" class="w-7 h-7 rounded-full object-cover border border-slate-200" alt="${pr.requester.name}">
@@ -910,12 +884,10 @@ function renderTable() {
           </div>
         </td>
 
-        <!-- Cột Giá trị dự kiến -->
         <td class="py-4 px-4 text-right whitespace-nowrap" onclick="openDetailDrawer('${pr.id}')">
           <div class="font-bold text-slate-900 text-xs ${isShadcn ? 'font-mono' : ''}">${formatVND(pr.amount)}</div>
         </td>
 
-        <!-- Cột Ưu tiên -->
         <td class="py-4 px-4 text-center whitespace-nowrap" onclick="openDetailDrawer('${pr.id}')">
           <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold inline-flex items-center gap-1.5 ${priorityBadgeClass}">
             <span class="w-1.5 h-1.5 rounded-full ${priorityCfg.dot}"></span>
@@ -923,7 +895,6 @@ function renderTable() {
           </span>
         </td>
 
-        <!-- Cột Trạng thái -->
         <td class="py-4 px-4 text-center whitespace-nowrap" onclick="openDetailDrawer('${pr.id}')">
           <span class="badge-status ${badgeClass}">
             <i class="fa-solid ${statusCfg.icon} text-[9px]"></i>
@@ -931,7 +902,6 @@ function renderTable() {
           </span>
         </td>
 
-        <!-- Cột Menu Thao Tác 3 chấm (⋮) -->
         <td class="py-4 px-4 w-12 text-center relative" onclick="event.stopPropagation()">
           <button type="button" onclick="toggleRowMenu('${pr.id}')" class="row-action-menu-btn w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors">
             <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
@@ -939,7 +909,6 @@ function renderTable() {
             </svg>
           </button>
 
-          <!-- Dropdown menu 3 chấm chuẩn Image 1 (media_1795161649839_ba011bdb.png) -->
           <div id="row-menu-${pr.id}" class="row-action-dropdown hidden absolute right-2 top-10 w-48 bg-white rounded-xl border border-slate-200 shadow-xl z-30 p-1.5 text-left text-xs animate-in fade-in">
             <button onclick="openDetailDrawer('${pr.id}'); closeAllRowMenus();" class="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg hover:bg-slate-100 transition-colors text-slate-700 font-medium">
               <svg class="w-4 h-4 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -994,6 +963,7 @@ function renderRowQuickMenuItems(pr, isShadcn = false) {
 
 function toggleRowMenu(id) {
   const menu = document.getElementById(`row-menu-${id}`);
+  if (!menu) return;
   const isHidden = menu.classList.contains('hidden');
   closeAllRowMenus();
   if (isHidden) {
@@ -1008,7 +978,7 @@ function closeAllRowMenus() {
 }
 
 // ========================================================
-// 11. PHÂN TRANG CHUẨN GA4 (từ reports-library.html)
+// 11. PHÂN TRANG CHUẨN GA4
 // ========================================================
 function renderPagination() {
   const processed = getProcessedRequests();
@@ -1024,7 +994,8 @@ function renderPagination() {
   const start = totalItems === 0 ? 0 : (AppState.pagination.page - 1) * pageSize + 1;
   const end = Math.min(AppState.pagination.page * pageSize, totalItems);
 
-  document.getElementById('paginationInfo').innerText = `${start} – ${end}/${totalItems}`;
+  const infoEl = document.getElementById('paginationInfo');
+  if (infoEl) infoEl.innerText = `${start} – ${end}/${totalItems}`;
 
   const isFirst = currentPage === 1;
   const isLast = currentPage === totalPages;
@@ -1089,7 +1060,6 @@ function handleSearch(val) {
   AppState.filters.search = val;
   AppState.pagination.page = 1;
 
-  // Đồng bộ giữa 2 ô search
   const reportSearch = document.getElementById('reportSearchInput');
   const globalSearch = document.getElementById('globalSearchInput');
   if (reportSearch && reportSearch.value !== val) reportSearch.value = val;
@@ -1100,8 +1070,10 @@ function handleSearch(val) {
 }
 
 function handleFilterChange() {
-  AppState.filters.department = document.getElementById('filter-department').value;
-  AppState.filters.status = document.getElementById('filter-status').value;
+  const deptEl = document.getElementById('filter-department');
+  const statusEl = document.getElementById('filter-status');
+  if (deptEl) AppState.filters.department = deptEl.value;
+  if (statusEl) AppState.filters.status = statusEl.value;
   AppState.pagination.page = 1;
 
   renderTable();
@@ -1116,10 +1088,15 @@ function resetFilters() {
     priority: 'ALL'
   };
 
-  document.getElementById('reportSearchInput').value = '';
-  document.getElementById('globalSearchInput').value = '';
-  document.getElementById('filter-department').value = 'ALL';
-  document.getElementById('filter-status').value = 'ALL';
+  const reportSearch = document.getElementById('reportSearchInput');
+  const globalSearch = document.getElementById('globalSearchInput');
+  const deptEl = document.getElementById('filter-department');
+  const statusEl = document.getElementById('filter-status');
+
+  if (reportSearch) reportSearch.value = '';
+  if (globalSearch) globalSearch.value = '';
+  if (deptEl) deptEl.value = 'ALL';
+  if (statusEl) statusEl.value = 'ALL';
   AppState.pagination.page = 1;
 
   renderAll();
@@ -1174,11 +1151,13 @@ function updateBulkActionBar() {
   const countEl = document.getElementById('bulk-selected-count');
   const count = AppState.selectedIds.size;
 
-  countEl.textContent = count;
-  if (count > 0) {
-    bar.classList.add('active');
-  } else {
-    bar.classList.remove('active');
+  if (countEl) countEl.textContent = count;
+  if (bar) {
+    if (count > 0) {
+      bar.classList.add('active');
+    } else {
+      bar.classList.remove('active');
+    }
   }
 }
 
@@ -1200,6 +1179,7 @@ function handleBulkApprove() {
     if (AppState.selectedIds.has(r.id) && (r.status === 'PENDING' || r.status === 'NEEDS_INFO')) {
       r.status = 'APPROVED';
       r.updatedAt = getNowDateTime();
+      applyDepartmentBudgetUsage(r);
       r.timeline.push({
         step: `Phê duyệt hàng loạt bởi ${role.badge}`,
         user: `${role.userName} (${role.badge})`,
@@ -1254,8 +1234,23 @@ function handleBulkExport() {
 }
 
 // ========================================================
-// 14. COMPONENT RIGHT INSIGHTS DRAWER (từ insights-drawer.html)
+// 14. COMPONENT RIGHT INSIGHTS DRAWER & PHÂN QUYỀN HẠN MỨC
 // ========================================================
+function canRoleApproveAmount(roleId, amount) {
+  if (roleId === 'REQUESTER') return false;
+  if (roleId === 'DIRECTOR') return true;
+  if (roleId === 'FINANCE') return amount <= 200000000;
+  if (roleId === 'MANAGER') return amount < 50000000;
+  return false;
+}
+
+function applyDepartmentBudgetUsage(pr) {
+  const dept = AppState.departments.find(d => d.id === pr.department);
+  if (!dept || pr._budgetApplied) return;
+  dept.usedBudget = Math.min(dept.totalBudget, dept.usedBudget + pr.amount);
+  pr._budgetApplied = true;
+}
+
 function openDetailDrawer(id) {
   const pr = AppState.requests.find(r => r.id === id);
   if (!pr) return;
@@ -1265,9 +1260,14 @@ function openDetailDrawer(id) {
   const statusCfg = STATUS_CONFIG[pr.status] || STATUS_CONFIG.PENDING;
   const priorityCfg = PRIORITY_CONFIG[pr.priority] || PRIORITY_CONFIG.MEDIUM;
 
-  document.getElementById('drawer-pr-id').textContent = pr.id;
-  document.getElementById('drawer-status-badge').className = `badge-status ${isShadcn ? statusCfg.badgeShadcn : statusCfg.badgeAnalytic}`;
-  document.getElementById('drawer-status-badge').innerHTML = `<i class="fa-solid ${statusCfg.icon} text-[9px]"></i> ${statusCfg.label}`;
+  const prIdEl = document.getElementById('drawer-pr-id');
+  if (prIdEl) prIdEl.textContent = pr.id;
+
+  const badgeEl = document.getElementById('drawer-status-badge');
+  if (badgeEl) {
+    badgeEl.className = `badge-status ${isShadcn ? statusCfg.badgeShadcn : statusCfg.badgeAnalytic}`;
+    badgeEl.innerHTML = `<i class="fa-solid ${statusCfg.icon} text-[9px]"></i> ${statusCfg.label}`;
+  }
 
   document.getElementById('drawer-title').textContent = pr.title;
   document.getElementById('drawer-category').textContent = pr.category;
@@ -1289,44 +1289,43 @@ function openDetailDrawer(id) {
   document.getElementById('drawer-vendor').textContent = pr.vendor || "Chưa xác định";
   const vendorLinkRow = document.getElementById('drawer-vendor-link-row');
   const vendorLinkEl = document.getElementById('drawer-vendor-link');
-  if (pr.vendorLink) {
-    vendorLinkRow.classList.remove('hidden');
-    vendorLinkEl.href = pr.vendorLink;
-  } else {
-    vendorLinkRow.classList.add('hidden');
+  if (vendorLinkRow && vendorLinkEl) {
+    if (pr.vendorLink) {
+      vendorLinkRow.classList.remove('hidden');
+      vendorLinkEl.href = pr.vendorLink;
+    } else {
+      vendorLinkRow.classList.add('hidden');
+    }
   }
 
   document.getElementById('drawer-purpose').textContent = pr.purpose || "Không có giải trình chi tiết.";
 
-  // Render items list
   const itemsList = document.getElementById('drawer-items-list');
-  if (pr.items && pr.items.length > 0) {
-    itemsList.innerHTML = pr.items.map(item => `
-      <tr class="hover:bg-slate-50">
-        <td class="py-1.5 px-2.5 font-medium text-slate-800">${item.name}</td>
-        <td class="py-1.5 px-2 text-center text-slate-600">${item.qty}</td>
-        <td class="py-1.5 px-2 text-right text-slate-600">${formatVND(item.unitPrice)}</td>
-        <td class="py-1.5 px-2.5 text-right font-bold text-slate-900">${formatVND(item.qty * item.unitPrice)}</td>
-      </tr>
-    `).join('');
-  } else {
-    itemsList.innerHTML = `<tr><td colspan="4" class="p-2 text-center text-slate-400">Không có danh mục lẻ.</td></tr>`;
+  if (itemsList) {
+    if (pr.items && pr.items.length > 0) {
+      itemsList.innerHTML = pr.items.map(item => `
+        <tr class="hover:bg-slate-50">
+          <td class="py-1.5 px-2.5 font-medium text-slate-800">${item.name}</td>
+          <td class="py-1.5 px-2 text-center text-slate-600">${item.qty}</td>
+          <td class="py-1.5 px-2 text-right text-slate-600">${formatVND(item.unitPrice)}</td>
+          <td class="py-1.5 px-2.5 text-right font-bold text-slate-900">${formatVND(item.qty * item.unitPrice)}</td>
+        </tr>
+      `).join('');
+    } else {
+      itemsList.innerHTML = `<tr><td colspan="4" class="p-2 text-center text-slate-400">Không có danh mục lẻ.</td></tr>`;
+    }
   }
 
-  // Render timeline
   renderDrawerTimeline(pr);
-
-  // Update action buttons
   updateDrawerActionButtons(pr);
 
-  // Slide drawer in
   const drawer = document.getElementById('drawerAnnotations');
-  drawer.classList.remove('translate-x-full');
+  if (drawer) drawer.classList.remove('translate-x-full');
 }
 
 function closeDetailDrawer() {
   const drawer = document.getElementById('drawerAnnotations');
-  drawer.classList.add('translate-x-full');
+  if (drawer) drawer.classList.add('translate-x-full');
   AppState.currentDetailId = null;
 }
 
@@ -1351,24 +1350,25 @@ function switchDrawerTab(tab) {
 
 function renderDrawerTimeline(pr) {
   const container = document.getElementById('drawer-timeline-container');
+  if (!container) return;
+
   if (!pr.timeline || pr.timeline.length === 0) {
     container.innerHTML = '<div class="text-xs text-slate-400">Chưa có nhật ký hoạt động.</div>';
     return;
   }
 
-  // Nếu đang ở theme shadcn: Áp dụng layout AI Elements / Stack Trace (ui.shadcn.com/docs/ai-elements/base/stack-trace)
   if (AppState.theme === 'shadcn') {
     container.className = "space-y-3";
     container.innerHTML = `
       <div class="shadcn-trace space-y-3">
         ${pr.timeline.map((step, idx) => {
-      const isDone = step.status === 'completed';
-      const isErr = step.status === 'rejected';
-      const isCurr = step.status === 'current';
-      const badgeBg = isDone ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : isErr ? 'bg-red-50 text-red-700 border-red-200' : isCurr ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-zinc-100 text-zinc-600 border-zinc-200';
-      const statusDot = isDone ? 'bg-emerald-500' : isErr ? 'bg-red-500' : isCurr ? 'bg-amber-500 animate-pulse' : 'bg-zinc-300';
+          const isDone = step.status === 'completed';
+          const isErr = step.status === 'rejected';
+          const isCurr = step.status === 'current';
+          const badgeBg = isDone ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : isErr ? 'bg-red-50 text-red-700 border-red-200' : isCurr ? 'bg-amber-50 text-amber-700 border-amber-200' : 'bg-zinc-100 text-zinc-600 border-zinc-200';
+          const statusDot = isDone ? 'bg-emerald-500' : isErr ? 'bg-red-500' : isCurr ? 'bg-amber-500 animate-pulse' : 'bg-zinc-300';
 
-      return `
+          return `
             <div class="rounded-xl border border-zinc-200 bg-white p-3.5 shadow-2xs space-y-2">
               <div class="flex items-center justify-between text-xs">
                 <div class="flex items-center gap-2">
@@ -1391,13 +1391,12 @@ function renderDrawerTimeline(pr) {
               ` : ''}
             </div>
           `;
-    }).join('')}
+        }).join('')}
       </div>
     `;
     return;
   }
 
-  // Theme GA4: Layout dòng thời gian với vòng tròn GA4
   container.className = "relative pl-6 space-y-4 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200";
   container.innerHTML = pr.timeline.map(step => {
     let icon = "fa-check";
@@ -1434,6 +1433,7 @@ function renderDrawerTimeline(pr) {
 
 function updateDrawerActionButtons(pr) {
   const actionsContainer = document.getElementById('drawer-actions');
+  if (!actionsContainer) return;
   const isRequester = AppState.currentRole === 'REQUESTER';
 
   if (isRequester || pr.status === 'APPROVED' || pr.status === 'REJECTED' || pr.status === 'ORDERED') {
@@ -1481,18 +1481,29 @@ function quickApprove(id) {
   if (!pr) return;
 
   const role = USER_ROLES[AppState.currentRole];
+  const withinLimit = canRoleApproveAmount(AppState.currentRole, pr.amount);
+
   pr.status = 'APPROVED';
   pr.updatedAt = getNowDateTime();
+  applyDepartmentBudgetUsage(pr);
   pr.timeline.push({
     step: `Phê duyệt bởi ${role.badge}`,
     user: `${role.userName} (${role.name})`,
     time: getNowDateTime(),
-    note: `Đã ký duyệt yêu cầu mua sắm`,
+    note: withinLimit
+      ? `Đã phê duyệt trong hạn mức phân quyền (${formatVND(pr.amount)})`
+      : `Đã phê duyệt (ghi nhận vượt hạn mức chuẩn của ${role.badge} để demo luồng)`,
     status: 'completed'
   });
 
   renderAll();
-  showToast("Đã phê duyệt", `Phiếu ${pr.id} đã được phê duyệt thành công.`, "success");
+  showToast(
+    "Đã phê duyệt",
+    withinLimit
+      ? `Phiếu ${pr.id} đã được phê duyệt thành công.`
+      : `Phiếu ${pr.id} (${formatVND(pr.amount)}) đã duyệt (lưu ý: vượt hạn mức chuẩn của ${role.badge}).`,
+    withinLimit ? "success" : "warning"
+  );
 }
 
 function openRejectModal(id = null) {
@@ -1534,7 +1545,8 @@ function openNeedsInfoModal(id = null) {
 }
 
 function closePromptModal() {
-  document.getElementById('action-prompt-modal').classList.add('hidden');
+  const modal = document.getElementById('action-prompt-modal');
+  if (modal) modal.classList.add('hidden');
   AppState.activePrompt = { type: null, targetId: null };
 }
 
@@ -1584,17 +1596,21 @@ function confirmPromptAction() {
 }
 
 // ========================================================
-// 15. TẠO MỚI PHIẾU MUA SẮM (REAL-TIME BUDGET CHECK)
+// 15. TẠO MỚI PHIẾU MUA SẮM
 // ========================================================
 function openCreateModal() {
-  document.getElementById('create-pr-form').reset();
-  document.getElementById('new-pr-total-display').textContent = "0 đ";
+  const form = document.getElementById('create-pr-form');
+  if (form) form.reset();
+  const totalDisplay = document.getElementById('new-pr-total-display');
+  if (totalDisplay) totalDisplay.textContent = "0 đ";
   updateBudgetCheckPreview();
-  document.getElementById('create-modal').classList.remove('hidden');
+  const modal = document.getElementById('create-modal');
+  if (modal) modal.classList.remove('hidden');
 }
 
 function closeCreateModal() {
-  document.getElementById('create-modal').classList.add('hidden');
+  const modal = document.getElementById('create-modal');
+  if (modal) modal.classList.add('hidden');
 }
 
 function calculateTotalAmount() {
@@ -1602,21 +1618,24 @@ function calculateTotalAmount() {
   const unitPrice = parseFloat(document.getElementById('new-pr-unit-price').value) || 0;
   const total = qty * unitPrice;
 
-  document.getElementById('new-pr-total-display').textContent = formatVND(total);
+  const totalDisplay = document.getElementById('new-pr-total-display');
+  if (totalDisplay) totalDisplay.textContent = formatVND(total);
   updateBudgetCheckPreview(total);
 }
 
 function updateBudgetCheckPreview(currentAmount = null) {
-  const deptId = document.getElementById('new-pr-department').value;
-  const dept = AppState.departments.find(d => d.id === deptId);
+  const deptSelect = document.getElementById('new-pr-department');
+  if (!deptSelect) return;
+  const dept = AppState.departments.find(d => d.id === deptSelect.value);
   if (!dept) return;
 
   const remaining = dept.totalBudget - dept.usedBudget;
-  document.getElementById('budget-preview-remaining').textContent = formatVND(remaining);
+  const remEl = document.getElementById('budget-preview-remaining');
+  if (remEl) remEl.textContent = formatVND(remaining);
 
   if (currentAmount === null) {
-    const qty = parseInt(document.getElementById('new-pr-qty').value, 10) || 0;
-    const unitPrice = parseFloat(document.getElementById('new-pr-unit-price').value) || 0;
+    const qty = parseInt(document.getElementById('new-pr-qty')?.value, 10) || 0;
+    const unitPrice = parseFloat(document.getElementById('new-pr-unit-price')?.value) || 0;
     currentAmount = qty * unitPrice;
   }
 
@@ -1625,18 +1644,22 @@ function updateBudgetCheckPreview(currentAmount = null) {
   const barEl = document.getElementById('budget-preview-bar');
 
   const afterPct = Math.round(((dept.usedBudget + currentAmount) / dept.totalBudget) * 100);
-  barEl.style.width = `${Math.min(afterPct, 100)}%`;
+  if (barEl) barEl.style.width = `${Math.min(afterPct, 100)}%`;
 
   if (currentAmount > remaining) {
-    statusEl.textContent = "Vượt hạn mức ngân sách!";
-    statusEl.className = "font-bold text-rose-600 text-[11px]";
-    warningEl.classList.remove('hidden');
-    barEl.className = "bg-rose-600 h-1.5 rounded-full";
+    if (statusEl) {
+      statusEl.textContent = "Vượt hạn mức ngân sách!";
+      statusEl.className = "font-bold text-rose-600 text-[11px]";
+    }
+    if (warningEl) warningEl.classList.remove('hidden');
+    if (barEl) barEl.className = "bg-rose-600 h-1.5 rounded-full";
   } else {
-    statusEl.textContent = `Trong định mức (${afterPct}% sử dụng)`;
-    statusEl.className = "font-semibold text-emerald-600 text-[11px]";
-    warningEl.classList.add('hidden');
-    barEl.className = "bg-blue-600 h-1.5 rounded-full";
+    if (statusEl) {
+      statusEl.textContent = `Trong định mức (${afterPct}% sử dụng)`;
+      statusEl.className = "font-semibold text-emerald-600 text-[11px]";
+    }
+    if (warningEl) warningEl.classList.add('hidden');
+    if (barEl) barEl.className = "bg-blue-600 h-1.5 rounded-full";
   }
 }
 
@@ -1739,7 +1762,7 @@ function handleSaveDraft() {
 }
 
 // ========================================================
-// 16. XUẤT CSV & IN ẤN (EXPORT & PRINT)
+// 16. XUẤT CSV & IN ẤN
 // ========================================================
 function exportToCSV() {
   const processed = getProcessedRequests();
@@ -1783,6 +1806,8 @@ function printSinglePR(id) {
   if (!pr) return;
 
   const printArea = document.getElementById('print-area');
+  if (!printArea) return;
+
   printArea.innerHTML = `
     <div style="font-family: Arial, sans-serif; padding: 40px; max-width: 800px; margin: 0 auto; color: #111;">
       <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #333; padding-bottom: 20px;">
@@ -1863,11 +1888,13 @@ function printSinglePR(id) {
 // 17. SPEC & REQUIREMENTS MODAL
 // ========================================================
 function openSpecModal() {
-  document.getElementById('spec-modal').classList.remove('hidden');
+  const modal = document.getElementById('spec-modal');
+  if (modal) modal.classList.remove('hidden');
 }
 
 function closeSpecModal() {
-  document.getElementById('spec-modal').classList.add('hidden');
+  const modal = document.getElementById('spec-modal');
+  if (modal) modal.classList.add('hidden');
 }
 
 function switchSpecTab(tab) {
@@ -1875,6 +1902,7 @@ function switchSpecTab(tab) {
   tabs.forEach(t => {
     const btn = document.getElementById(`spec-tab-${t}`);
     const content = document.getElementById(`spec-content-${t}`);
+    if (!btn || !content) return;
     if (t === tab) {
       btn.className = "py-3 px-4 border-b-2 border-blue-600 text-blue-600 transition-colors flex items-center gap-1.5 font-bold";
       content.classList.remove('hidden');
@@ -1913,6 +1941,7 @@ function renderSpecScenarios() {
 // ========================================================
 function showToast(title, message, type = 'info') {
   const container = document.getElementById('toast-container');
+  if (!container) return;
   const toast = document.createElement('div');
 
   let icon = "fa-circle-info text-blue-500";
@@ -1959,3 +1988,4 @@ function getNowDateTime() {
   const min = String(now.getMinutes()).padStart(2, '0');
   return `${d}/${m}/${y} ${h}:${min}`;
 }
+
