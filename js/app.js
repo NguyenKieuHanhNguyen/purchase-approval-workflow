@@ -231,6 +231,18 @@ function setActiveNav(el, key) {
     el.classList.remove('text-slate-600', 'hover:bg-slate-100');
     el.classList.add('bg-blue-600', 'text-white', 'shadow-2xs', 'font-semibold');
   }
+
+  if (key === 'reports') {
+    AppState.filters.status = 'ALL';
+    const statusEl = document.getElementById('filter-status');
+    if (statusEl) statusEl.value = 'ALL';
+    AppState.pagination.page = 1;
+    renderAll();
+    scrollToTable();
+    showToast("Yêu cầu mua sắm (PR)", "Đang hiển thị toàn bộ danh sách phiếu mua sắm.", "info");
+  } else if (key === 'home') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }
 
 function filterByPending() {
